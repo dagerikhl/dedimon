@@ -1,0 +1,7 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-small) var(--space-large);
+  min-height: calc(100vh - var(--header-height));
+}

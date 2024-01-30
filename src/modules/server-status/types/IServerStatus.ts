@@ -1,1 +1,6 @@
-export type IServerStatus = "running" | "stopped" | "offline";
+export type IServerStatus =
+  | "starting"
+  | "running"
+  | "stopping"
+  | "stopped"
+  | "offline";

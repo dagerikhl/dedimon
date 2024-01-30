@@ -3,9 +3,8 @@
   align-items: center;
   gap: var(--space-x-small);
   padding: var(--space-x-small) var(--space-small);
-  border: 1px solid var(--brd-pri);
+  border: 2px solid var(--brd-pri);
   border-radius: var(--border-radius);
-  font-family: inherit;
 
   &:disabled {
     filter: grayscale(1);
@@ -15,7 +14,7 @@
     cursor: pointer;
 
     &:hover {
-      border: 1px solid var(--col-acc);
+      border: 2px solid var(--col-acc);
     }
   }
 

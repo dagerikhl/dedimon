@@ -2,6 +2,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
+import "normalize.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "./globals.scss";
 import styles from "./layout.module.scss";

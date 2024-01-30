@@ -1,8 +1,9 @@
 "use client";
 
 import { Button } from "@/common/components/buttons/Button";
+import { Loader } from "@/common/components/layout/Loader";
+import { IApiServerState } from "@/features/state/types/IApiServerState";
 import { ServerStatus } from "@/modules/server-status/components/ServerStatus";
-import { IServerStatus } from "@/modules/server-status/types/IServerStatus";
 import {
   formatDatetime,
   formatUptime,
@@ -12,26 +13,46 @@ import {
   faPlay,
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./State.module.scss";
 
-const getUptime = (started: string): string => {
+const getUptime = (started: string | undefined): string => {
+  if (!started) {
+    return "-";
+  }
+
   const now = new Date();
 
   return formatUptime(started, now) || "-";
 };
 
 export const State = () => {
-  // TODO Get from API
-  const status: IServerStatus = "running" as IServerStatus;
-  // TODO Get from API
-  const started = new Date(2023, 11, 30, 10, 19).toISOString();
-
-  const [uptime, setUptime] = useState(getUptime(started));
+  // TODO Make a call to check that the server is online
+  const [state, setState] = useState<IApiServerState>({ status: "offline" });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+    axios
+      .get<IApiServerState>("/api/server/health")
+      .then((res) => {
+        setState(res.data);
+      })
+      .catch((e) => {
+        setState({ status: "offline" });
+
+        console.error(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  const [uptime, setUptime] = useState(getUptime(state.started));
+  useEffect(() => {
     const id = setInterval(() => {
-      setUptime(getUptime(started));
+      setUptime(getUptime(state.started));
     }, 1000);
 
     return () => {
@@ -39,48 +60,74 @@ export const State = () => {
     };
   });
 
+  const handleStartServer = async () => {
+    setIsLoading(true);
+    axios
+      .post<IApiServerState>("/api/server/start")
+      .then((res) => {
+        setState(res.data);
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.containerInner}>
-        <div>
-          Status: <ServerStatus status={status} />
+    <>
+      <div className={styles.container}>
+        <div className={styles.containerInner}>
+          <div>
+            Status: <ServerStatus status={state.status} />
+          </div>
+
+          <div
+            title={`Started: ${state.started ? formatDatetime(state.started, true) : "-"}`}
+          >
+            Uptime: {uptime}
+          </div>
         </div>
 
-        <div title={`Started: ${formatDatetime(started, true)}`}>
-          Uptime: {uptime}
+        <div className={styles.containerInner}>
+          {/* TODO Handle clicks to trigger server actions */}
+
+          <div className={styles.groupHorizontal}>
+            <Button
+              variant="success"
+              icon={faPlay}
+              disabled={state.status !== "stopped"}
+              onClick={handleStartServer}
+            >
+              Start server
+            </Button>
+            <Button
+              variant="error"
+              icon={faStop}
+              disabled={state.status !== "running"}
+            >
+              Stop server
+            </Button>
+          </div>
+
+          <div className={styles.groupHorizontal}>
+            <Button
+              variant="accent"
+              icon={faCloudArrowUp}
+              disabled={
+                state.status === "offline" ||
+                state.status === "starting" ||
+                state.status === "stopping"
+              }
+            >
+              Update server
+            </Button>
+          </div>
         </div>
       </div>
 
-      <div className={styles.containerInner}>
-        {/* TODO Handle clicks to trigger server actions */}
-
-        <div className={styles.groupHorizontal}>
-          <Button
-            variant="success"
-            icon={faPlay}
-            disabled={status === "running" || status === "offline"}
-          >
-            Start server
-          </Button>
-          <Button
-            variant="error"
-            icon={faStop}
-            disabled={status === "stopped" || status === "offline"}
-          >
-            Stop server
-          </Button>
-        </div>
-
-        <div className={styles.groupHorizontal}>
-          <Button
-            variant="accent"
-            icon={faCloudArrowUp}
-            disabled={status === "offline"}
-          >
-            Update server
-          </Button>
-        </div>
-      </div>
-    </div>
+      <Loader isLoading={isLoading} />
+    </>
   );
 };

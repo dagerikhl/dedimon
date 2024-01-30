@@ -2,7 +2,7 @@ import { IServerStatus } from "@/modules/server-status/types/IServerStatus";
 import {
   formatServerStatus,
   getServerStatusColor,
-  getServerStatusIcon,
+  getServerStatusIconProps,
 } from "@/modules/server-status/utils/formatting";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -12,10 +12,10 @@ export interface IServerStatusProps {
 
 export const ServerStatus = ({ status }: IServerStatusProps) => (
   <span>
+    {formatServerStatus(status)}{" "}
     <FontAwesomeIcon
-      icon={getServerStatusIcon(status)}
+      {...getServerStatusIconProps(status)}
       color={getServerStatusColor(status)}
-    />{" "}
-    {formatServerStatus(status)}
+    />
   </span>
 );

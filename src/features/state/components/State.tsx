@@ -14,7 +14,7 @@ import {
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./State.module.scss";
 
 const getUptime = (started: string | undefined): string => {
@@ -28,45 +28,54 @@ const getUptime = (started: string | undefined): string => {
 };
 
 export const State = () => {
-  // TODO Make a call to check that the server is online
   const [state, setState] = useState<IApiServerState>({ status: "offline" });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get<IApiServerState>("/api/server/health")
-      .then((res) => {
-        setState(res.data);
-      })
-      .catch((e) => {
-        setState({ status: "offline" });
+    const getState = () => {
+      setIsLoading(true);
+      axios
+        .get<IApiServerState>("/api/server/state")
+        .then((res) => {
+          setState(res.data);
+        })
+        .catch((e) => {
+          setState({ status: "offline" });
 
-        console.error(e);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+          console.error(e);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
 
-  const [uptime, setUptime] = useState(getUptime(state.started));
-  useEffect(() => {
-    const id = setInterval(() => {
-      setUptime(getUptime(state.started));
-    }, 1000);
+    getState();
+
+    const id = setInterval(getState, 2 * 1000);
 
     return () => {
       clearInterval(id);
     };
-  });
+  }, []);
+
+  const uptime = useMemo(() => getUptime(state.started), [state.started]);
 
   const handleStartServer = async () => {
     setIsLoading(true);
     axios
       .post<IApiServerState>("/api/server/start")
-      .then((res) => {
-        setState(res.data);
+      .catch((e) => {
+        console.error(e);
       })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleStopServer = async () => {
+    setIsLoading(true);
+    axios
+      .post<IApiServerState>("/api/server/stop")
       .catch((e) => {
         console.error(e);
       })
@@ -91,8 +100,6 @@ export const State = () => {
         </div>
 
         <div className={styles.containerInner}>
-          {/* TODO Handle clicks to trigger server actions */}
-
           <div className={styles.groupHorizontal}>
             <Button
               variant="success"
@@ -106,12 +113,14 @@ export const State = () => {
               variant="error"
               icon={faStop}
               disabled={state.status !== "running"}
+              onClick={handleStopServer}
             >
               Stop server
             </Button>
           </div>
 
           <div className={styles.groupHorizontal}>
+            {/* TODO Handle click to trigger update via SteamCMD */}
             <Button
               variant="accent"
               icon={faCloudArrowUp}
@@ -127,7 +136,7 @@ export const State = () => {
         </div>
       </div>
 
-      <Loader isLoading={isLoading} />
+      <Loader isLoading={isLoading && state.status !== "running"} />
     </>
   );
 };

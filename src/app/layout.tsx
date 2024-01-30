@@ -29,6 +29,7 @@ export default function RootLayout({
 
           <p>&copy; dagerikhl 2024 &ndash;</p>
         </header>
+
         {children}
       </body>
     </html>

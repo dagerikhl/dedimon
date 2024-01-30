@@ -1,0 +1,28 @@
+.container {
+  --heading-height: 35px;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  height: 100%;
+  border: 1px solid var(--brd-pri);
+  border-radius: var(--border-radius);
+}
+
+.heading {
+  height: var(--heading-height);
+  padding: var(--space-small);
+  background-color: var(--bkg-sec);
+  border-bottom: 1px solid var(--brd-pri);
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
+}
+
+.content {
+  display: flex;
+  height: calc(100% - var(--heading-height) - var(--space-small));
+
+  &.padding {
+    padding: var(--space-small);
+  }
+}

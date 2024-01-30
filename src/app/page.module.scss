@@ -1,0 +1,35 @@
+.main {
+  display: grid;
+  grid-template-areas:
+    "state state state state log log"
+    "info info config config log log"
+    "info info config config log log"
+    "info info config config log log"
+    "info info config config log log"
+    "info info config config log log"
+    "info info config config log log"
+    "info info config config log log"
+    "info info config config log log"
+    "info info config config log log";
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: var(--space-small);
+  height: calc(100vh - var(--header-height));
+  padding: var(--space-small);
+}
+
+.state {
+  grid-area: state;
+}
+
+.info {
+  grid-area: info;
+}
+
+.config {
+  grid-area: config;
+}
+
+.log {
+  grid-area: log;
+}

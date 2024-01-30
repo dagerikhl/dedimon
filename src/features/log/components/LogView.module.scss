@@ -1,0 +1,21 @@
+.container {
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-y: scroll;
+  padding: var(--space-small);
+
+  > p {
+    padding-left: 2ch;
+    text-indent: -2ch;
+  }
+
+  > *:not(.scrollAnchor) {
+    overflow-anchor: none;
+  }
+
+  > .scrollAnchor {
+    height: 1px;
+    overflow-anchor: auto;
+  }
+}

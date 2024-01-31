@@ -1,6 +1,6 @@
 import { formatDatetime } from "@/common/utils/formatting/datetime";
 
-const getTimestamp = () => `[${formatDatetime(new Date())}]`;
+export const getTimestamp = () => `[${formatDatetime(new Date(), true)}]`;
 
 export const LOGGER = {
   info: (...data: any[]) => {

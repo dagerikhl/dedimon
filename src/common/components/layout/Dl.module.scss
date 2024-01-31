@@ -1,0 +1,6 @@
+.container {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: var(--space-large);
+  align-content: start;
+}

@@ -18,9 +18,7 @@ import cz from "classnames";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import styles from "./Config.module.scss";
 
-export interface IConfigProps<T extends Record<string, any>> {}
-
-export const Config = <T extends Record<string, any>>({}: IConfigProps<T>) => {
+export const Config = <T extends Record<string, any>>() => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [config, setConfig] = useState<IApiServerConfig<T> | undefined>(

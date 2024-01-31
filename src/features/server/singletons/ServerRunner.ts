@@ -1,5 +1,7 @@
-import { LOGGER } from "@/features/server/utils/logger";
+import { formatDatetime } from "@/common/utils/formatting/datetime";
+import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
 import { IApiServerState } from "@/features/state/types/IApiServerState";
+import { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
 import { ChildProcess, execFile } from "child_process";
 import path from "path";
 
@@ -8,7 +10,45 @@ type ISetter<S> = S | ((prevState: S) => S);
 type ISubscribeCallback = (state: IApiServerState) => void;
 type IUnsubscribeCallback = () => void;
 
-const SERVER_START_RE = /\[Session] 'HostOnline' \(up\)!/;
+const SERVER_START_RE = /\[Session] 'HostOnline' \(up\)!/i;
+
+const INFO_GAME_VERSION_RE = /Game Version \(SVN\): (\d+)/i;
+const INFO_BASE_COUNT_RE = /\[savexxx] LOAD (\d+) bases \d+ entities/i;
+const INFO_ENTITY_COUNT_RE = /\[savexxx] LOAD \d+ bases (\d+) entities/i;
+const INFO_PUBLIC_IP_RE = /\[online] Public ipv4: (\d+\.\d+\.\d+\.\d+)/i;
+const INFO_LAST_SAVED_RE = /\[server] Saved/i;
+
+const toNumberIfDefined = (value: string | undefined): number | undefined =>
+  value ? +value : undefined;
+
+const mergeLog = (log: string[] | undefined, newLogEntry: string): string[] => [
+  ...(log ?? []),
+  newLogEntry,
+];
+
+const mergeInfo = (
+  info: IApiServerStateInfo | undefined,
+  newInfo: IApiServerStateInfo,
+): IApiServerStateInfo | undefined => {
+  const mergedInfo: IApiServerStateInfo = { ...info };
+
+  for (const [key, value] of Object.entries(newInfo)) {
+    if (value === null || value === undefined) {
+      continue;
+    }
+
+    mergedInfo[key as keyof IApiServerStateInfo] = value;
+  }
+
+  if (
+    Object.values(mergedInfo).filter((x) => x !== null && x !== undefined)
+      .length === 0
+  ) {
+    return undefined;
+  }
+
+  return mergedInfo;
+};
 
 export class ServerRunner {
   private static _instance: ServerRunner;
@@ -75,18 +115,32 @@ export class ServerRunner {
     };
 
   private createLogHandler = (resolve: VoidFunction) => (data: string) => {
+    const info: IApiServerStateInfo = {
+      gameVersion: data.match(INFO_GAME_VERSION_RE)?.[1],
+      baseCount: toNumberIfDefined(data.match(INFO_BASE_COUNT_RE)?.[1]),
+      entityCount: toNumberIfDefined(data.match(INFO_ENTITY_COUNT_RE)?.[1]),
+      publicIp: data.match(INFO_PUBLIC_IP_RE)?.[1],
+      lastSaved: INFO_LAST_SAVED_RE.test(data)
+        ? formatDatetime(new Date(), true)
+        : undefined,
+    };
+
+    const newLogEntry = `${getTimestamp()} ${data}`;
+
     if (SERVER_START_RE.test(data)) {
       this.setState((current) => ({
         status: "running",
         started: new Date().toISOString(),
-        log: [...(current.log ?? []), data],
+        log: mergeLog(current.log, newLogEntry),
+        info: mergeInfo(current.info, info),
       }));
 
       resolve();
     } else {
       this.setState((current) => ({
         ...current,
-        log: [...(current.log ?? []), data],
+        log: mergeLog(current.log, newLogEntry),
+        info: mergeInfo(current.info, info),
       }));
     }
   };

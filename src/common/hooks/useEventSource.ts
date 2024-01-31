@@ -8,6 +8,7 @@ export interface IUseEventSourceProps<T = any> {
   onMessage: IEventSourceMessageCallback<T>;
 }
 
+// TODO The EventSource should be kept in a provider to share it between components
 export const useEventSource = <T = any>({
   url,
   onMessage,

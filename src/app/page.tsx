@@ -1,5 +1,6 @@
 import { Card } from "@/common/components/layout/Card";
 import { Config } from "@/features/config/components/Config";
+import { Info } from "@/features/info/components/Info";
 import { Log } from "@/features/log/components/Log";
 import { State } from "@/features/state/components/State";
 import styles from "./page.module.scss";
@@ -12,7 +13,7 @@ export default function Home() {
       </Card>
 
       <Card className={styles.info} heading="Info">
-        TODO Add info
+        <Info />
       </Card>
 
       <Card className={styles.config} heading="Config">

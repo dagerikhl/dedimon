@@ -55,11 +55,10 @@ export const State = () => {
   const handleStopServer = async () => {
     setIsLoading(true);
     axios
-      .post<
-        IApiServerState,
-        AxiosResponse<IApiServerState>,
-        IApiServerUpdatePayload
-      >("/api/server/state", { action: "stop" })
+      .post<void, AxiosResponse<void>, IApiServerUpdatePayload>(
+        "/api/server/state",
+        { action: "stop" },
+      )
       .catch((e) => {
         console.error(e);
       })
@@ -71,11 +70,10 @@ export const State = () => {
   const handleUpdateServer = async () => {
     setIsLoading(true);
     axios
-      .post<
-        IApiServerState,
-        AxiosResponse<IApiServerState>,
-        IApiServerUpdatePayload
-      >("/api/server/state", { action: "update" })
+      .post<void, AxiosResponse<void>, IApiServerUpdatePayload>(
+        "/api/server/state",
+        { action: "update" },
+      )
       .catch((e) => {
         console.error(e);
       })
@@ -109,6 +107,7 @@ export const State = () => {
             >
               Start server
             </Button>
+
             <Button
               variant="error"
               icon={faStop}

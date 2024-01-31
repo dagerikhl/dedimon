@@ -68,6 +68,11 @@ export const POST = async (req: Request) => {
 
       LOGGER.info("[state] Updating server...");
       break;
+    default:
+      LOGGER.error(
+        "[state] POST action not recognized, payload received:",
+        body,
+      );
   }
 
   return new Response();

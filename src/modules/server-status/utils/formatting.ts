@@ -1,5 +1,4 @@
 import { IServerStatus } from "@/modules/server-status/types/IServerStatus";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {
   faBan,
   faCircleQuestion,

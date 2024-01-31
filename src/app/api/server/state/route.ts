@@ -7,6 +7,8 @@ export const runtime = "nodejs";
 // Required to make EventStream work
 export const dynamic = "force-dynamic";
 
+// Note: All usage of the ServerRunner _must_ be from this endpoint to not create multiple singletons
+
 export const GET = async (req: Request) => {
   LOGGER.info("[state] EventStream opened");
 

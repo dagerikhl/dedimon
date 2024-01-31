@@ -1,8 +1,6 @@
 .container {
-  max-height: 600px;
+  max-height: 900px;
   width: 100%;
-  white-space: pre-wrap;
-  word-break: break-all;
   overflow-y: scroll;
   padding: var(--space-small);
 
@@ -18,5 +16,9 @@
   > .scrollAnchor {
     height: 1px;
     overflow-anchor: auto;
+  }
+
+  @media screen and (min-width: 1024px) {
+    max-height: unset;
   }
 }

@@ -14,17 +14,17 @@
 
   @media screen and (min-width: 1024px) {
     grid-template-areas:
-      "state state state state log log"
-      "info info config config log log"
-      "info info config config log log"
-      "info info config config log log"
-      "info info config config log log"
-      "info info config config log log"
-      "info info config config log log"
-      "info info config config log log"
-      "info info config config log log"
-      "info info config config log log";
-    grid-template-columns: repeat(6, 1fr);
+      "state state log"
+      "info config log"
+      "info config log"
+      "info config log"
+      "info config log"
+      "info config log"
+      "info config log"
+      "info config log"
+      "info config log"
+      "info config log";
+    grid-template-columns: 1fr 1fr 2fr;
     grid-template-rows: repeat(10, 1fr);
     overflow-y: unset;
   }

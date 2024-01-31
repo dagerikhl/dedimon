@@ -9,7 +9,7 @@
   width: 100%;
   pointer-events: none;
   opacity: 1;
-  transition: opacity 80ms ease-in-out;
+  transition: opacity 180ms ease-in-out;
 
   &:not(.isLoading) {
     opacity: 0;

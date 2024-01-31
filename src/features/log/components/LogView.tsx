@@ -1,5 +1,6 @@
 "use client";
 
+import { Code } from "@/common/components/formatting/Code";
 import { useEffect, useRef, useState } from "react";
 import styles from "./LogView.module.scss";
 
@@ -12,7 +13,11 @@ const padLog = (log: string[]): string[] => {
 
   const padCount = MIN_LINES - log.length;
 
-  return [...Array.from({ length: padCount }).map(() => " "), ...log];
+  return [
+    ...Array.from({ length: padCount - 1 }).map(() => " "),
+    `${"-".repeat(20)} START OF LOG ${"-".repeat(20)}`,
+    ...log,
+  ];
 };
 
 export interface ILogViewProps {
@@ -20,12 +25,12 @@ export interface ILogViewProps {
 }
 
 export const LogView = ({ log }: ILogViewProps) => {
-  const scrollAnchorRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLElement>(null);
 
   const [lines, setLines] = useState(padLog(log));
 
   useEffect(() => {
-    scrollAnchorRef.current?.scrollIntoView();
+    scrollContainerRef.current?.scrollTo(0, 10000);
   }, []);
 
   useEffect(() => {
@@ -33,12 +38,12 @@ export const LogView = ({ log }: ILogViewProps) => {
   }, [log]);
 
   return (
-    <code className={styles.container}>
+    <Code ref={scrollContainerRef} className={styles.container}>
       {lines.map((line, i) => (
         <p key={i}>{line}</p>
       ))}
 
-      <div ref={scrollAnchorRef} className={styles.scrollAnchor} />
-    </code>
+      <div className={styles.scrollAnchor} />
+    </Code>
   );
 };

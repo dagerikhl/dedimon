@@ -1,4 +1,5 @@
 import { formatDatetime } from "@/common/utils/formatting/datetime";
+import { IAdapterType } from "@/features/adapters/types/IAdapterType";
 import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
 import { IApiServerState } from "@/features/state/types/IApiServerState";
 import { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
@@ -63,6 +64,7 @@ const formatSteamCmdProgress = (progress: IProgress): string =>
 export class ServerRunner {
   private static _instance: ServerRunner;
 
+  private readonly _adapter: string;
   private readonly _appId: string;
   private readonly _serverPath: string;
   private readonly _serverExePath: string;
@@ -75,11 +77,13 @@ export class ServerRunner {
   private _state: IApiServerState = { status: "stopped" };
 
   private constructor(
+    adapter: IAdapterType,
     appId: string,
     serverPath: string,
     serverExePath: string,
     serverConfigPath: string,
   ) {
+    this._adapter = adapter;
     this._appId = appId;
     this._serverPath = path.resolve(serverPath);
     this._serverExePath = path.resolve(serverExePath);
@@ -102,6 +106,7 @@ export class ServerRunner {
 
     if (!ServerRunner._instance) {
       ServerRunner._instance = new ServerRunner(
+        process.env.ADAPTER,
         process.env.APP_ID,
         process.env.SERVER_PATH,
         process.env.SERVER_EXE_PATH,

@@ -16,7 +16,7 @@ export const Info = () => {
           {Object.entries(state.info).map(([key, value]) => (
             <Fragment key={key}>
               <dt>{camelCaseToTitleCase(key)}:</dt>
-              <dl>{typeof value === "string" ? `"${value}"` : value}</dl>
+              <dl>{value}</dl>
             </Fragment>
           ))}
         </Dl>

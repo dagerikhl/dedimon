@@ -1,3 +1,4 @@
+import { sleep } from "@/common/utils/async/sleep";
 import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
 import { IApiServerState } from "@/features/state/types/IApiServerState";
@@ -53,6 +54,7 @@ const mergeInfo = (
 export class ServerRunner {
   private static _instance: ServerRunner;
 
+  private readonly _appId: string;
   private readonly _steamCmdPath: string;
   private readonly _serverPath: string;
   private readonly _serverExePath: string;
@@ -65,11 +67,13 @@ export class ServerRunner {
   private _state: IApiServerState = { status: "stopped" };
 
   private constructor(
+    appId: string,
     steamCmdPath: string,
     serverPath: string,
     serverExePath: string,
     serverConfigPath: string,
   ) {
+    this._appId = path.resolve(appId);
     this._steamCmdPath = path.resolve(steamCmdPath);
     this._serverPath = path.resolve(serverPath);
     this._serverExePath = path.resolve(serverExePath);
@@ -80,18 +84,20 @@ export class ServerRunner {
 
   public static getInstance(): ServerRunner {
     if (
+      !process.env.APP_ID ||
       !process.env.STEAMCMD_PATH ||
       !process.env.SERVER_PATH ||
       !process.env.SERVER_EXE_PATH ||
       !process.env.SERVER_CONFIG_PATH
     ) {
       throw new Error(
-        "Unable to find all the required environment variables [STEAMCMD_PATH, SERVER_PATH, SERVER_EXE_PATH, SERVER_CONFIG_PATH], please make sure they are present in the `.env.local` file at the project root",
+        "Unable to find all the required environment variables [APP_ID, STEAMCMD_PATH, SERVER_PATH, SERVER_EXE_PATH, SERVER_CONFIG_PATH], please make sure they are present in the `.env.local` file at the project root",
       );
     }
 
     if (!ServerRunner._instance) {
       ServerRunner._instance = new ServerRunner(
+        process.env.APP_ID,
         process.env.STEAMCMD_PATH,
         process.env.SERVER_PATH,
         process.env.SERVER_EXE_PATH,
@@ -210,6 +216,61 @@ export class ServerRunner {
       // Note: Signals aren't supported on Windows, so this won't shut down gracefully, it'll kill it immediately
       // TODO Figure out a way to gracefully shut down server
       this._serverProcess.kill("SIGINT");
+    });
+  };
+
+  public update = async () => {
+    return new Promise<void>(async (resolve) => {
+      if (this._serverProcess) {
+        LOGGER.info("Server current running, shutting down for update");
+
+        await this.stop();
+
+        // Wait to let the server actually shut down
+        await sleep(5000);
+      }
+
+      this.setState((current) => ({
+        ...current,
+        log: mergeLog(
+          current.log,
+          `\n\n${"-".repeat(20)} UPDATING SERVER... ${"-".repeat(20)}\n\n`,
+        ),
+      }));
+
+      const steamCmdProcess = execFile(this._steamCmdPath, [
+        `+force_install_dir ${path.basename(this._serverPath)}`,
+        "+login anonymous",
+        `+app_update ${this._appId} validate`,
+      ]);
+
+      const handleLog = (data: string) => {
+        const newLogEntry = `${getTimestamp()} [UPDATE] ${data}`;
+
+        this.setState((current) => ({
+          ...current,
+          log: mergeLog(current.log, newLogEntry),
+        }));
+      };
+
+      steamCmdProcess.stdout?.on("data", handleLog);
+
+      const handleDeath = (code: number | null, signal: NodeJS.Signals) => {
+        LOGGER.info(`Update stopped with code ${code} from signal ${signal}`);
+
+        this.setState((current) => ({
+          ...current,
+          log: mergeLog(
+            current.log,
+            `\n\n${"-".repeat(20)} UPDATE COMPLETE ${"-".repeat(20)}\n\n`,
+          ),
+        }));
+
+        // TODO This process might not exist, may need to sleep, then kill it
+        resolve();
+      };
+
+      steamCmdProcess.on("close", handleDeath);
     });
   };
 }

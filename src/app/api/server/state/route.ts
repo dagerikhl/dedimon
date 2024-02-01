@@ -64,9 +64,11 @@ export const POST = async (req: Request) => {
       LOGGER.info("[state] Server stopped");
       break;
     case "update":
-      // TODO Impl. app update
-
       LOGGER.info("[state] Updating server...");
+
+      await serverRunner.update();
+
+      LOGGER.info("[state] Server updated");
       break;
     default:
       LOGGER.error(

@@ -1,0 +1,18 @@
+diff --git a/node_modules/steamcmd-interface/dist/steam-cmd.js b/node_modules/steamcmd-interface/dist/steam-cmd.js
+index 107b6eb..ddda5d2 100644
+--- a/node_modules/steamcmd-interface/dist/steam-cmd.js
++++ b/node_modules/steamcmd-interface/dist/steam-cmd.js
+@@ -1066,11 +1066,11 @@ class SteamCmd {
+      */
+ 
+ 
+-    const progressRegex = /Update state \((0x\d+)\) (\w+), progress: (\d+.\d+) \((\d+) \/ (\d+)\)$/;
++    const progressRegex = /Update state \((0x\d+)\) ([\w\s]+), progress: (\d+.\d+) \((\d+) \/ (\d+)\)?$/;
+ 
+     for await (const line of this.run(commands)) {
+       // Test the current line of output
+-      const result = progressRegex.exec(line); // If the current line doesn't match the Regex pattern then it's skipped.
++      const result = progressRegex.exec(line.replaceAll('\b', '')); // If the current line doesn't match the Regex pattern then it's skipped.
+ 
+       if (result == null) continue; // If the pattern matched then we assign each one of the capture groups to
+       // a variable

@@ -6,11 +6,11 @@ Dedicated server monitor
 
 - [Node.js v18+](https://nodejs.org)
 - [Yarn v1](https://classic.yarnpkg.com)
+- [Windows SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/) (only the "Desktop C++ Apps" components need to be installed)
 - Correctly setup environment variables in `.env.local` in the root of this project. See below for format.
 
 ```dotenv
 APP_ID="<steam app id>"
-STEAMCMD_PATH="<path to your steamcmd executable>"
 SERVER_PATH="<path to your server directory>"
 SERVER_EXE_PATH="<path to your server executable>"
 SERVER_CONFIG_PATH="<path to your server config file>"
@@ -20,7 +20,6 @@ Example:
 
 ```dotenv
 APP_ID="2278520"
-STEAMCMD_PATH="C:\Games\Steam\steamcmd.exe"
 SERVER_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer"
 SERVER_EXE_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded_server.exe"
 SERVER_CONFIG_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded_server.json"

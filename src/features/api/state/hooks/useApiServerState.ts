@@ -7,6 +7,7 @@ export const useApiServerState = (): IApiServerState => {
 
   useEventSource<IApiServerState>({
     url: "/api/server/state",
+    id: "state",
     onMessage: useCallback((data) => {
       setState(data);
     }, []),

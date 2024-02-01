@@ -1,3 +1,4 @@
+import { EventSourceProvider } from "@/common/providers/EventSourceProvider/EventSourceProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -24,13 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className={styles.header}>
-          <h1>Dedimon</h1>
+        <EventSourceProvider>
+          <header className={styles.header}>
+            <h1>Dedimon</h1>
 
-          <p>&copy; dagerikhl 2024 &ndash;</p>
-        </header>
+            <p>&copy; dagerikhl 2024 &ndash;</p>
+          </header>
 
-        {children}
+          {children}
+        </EventSourceProvider>
       </body>
     </html>
   );

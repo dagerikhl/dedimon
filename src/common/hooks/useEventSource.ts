@@ -1,29 +1,33 @@
-import { useEffect } from "react";
+import {
+  IEventSourceMessageHandler,
+  useEventSourceStore,
+} from "@/common/providers/EventSourceProvider/EventSourceContext";
+import { useCallback, useEffect } from "react";
 
 export type IEventSourceMessageCallback<T = any> = (data: T) => void;
 
 export interface IUseEventSourceProps<T = any> {
   url: string;
+  id: string;
   /** Must be memoized. */
   onMessage: IEventSourceMessageCallback<T>;
 }
 
-// TODO The EventSource should be kept in a provider to share it between components
 export const useEventSource = <T = any>({
   url,
+  id,
   onMessage,
 }: IUseEventSourceProps<T>) => {
-  useEffect(() => {
-    const eventSource = new EventSource(url);
+  const { subscribe } = useEventSourceStore();
 
-    const handleMessage = ({ data }: MessageEvent<string>) => {
+  const handleMessage = useCallback<IEventSourceMessageHandler>(
+    ({ data }) => {
       onMessage(JSON.parse(data));
-    };
+    },
+    [onMessage],
+  );
 
-    eventSource.addEventListener("message", handleMessage);
-
-    return () => {
-      eventSource.close();
-    };
-  }, [onMessage, url]);
+  useEffect(() => {
+    return subscribe(url, id, handleMessage);
+  }, [handleMessage, id, subscribe, url]);
 };

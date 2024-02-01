@@ -1,9 +1,8 @@
-import { sleep } from "@/common/utils/async/sleep";
 import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
 import { IApiServerState } from "@/features/state/types/IApiServerState";
 import { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
-import { ChildProcess, execFile } from "child_process";
+import * as pty from "node-pty";
 import path from "path";
 import { IProgress, SteamCmd } from "steamcmd-interface";
 
@@ -52,8 +51,14 @@ const mergeInfo = (
   return mergedInfo;
 };
 
+const normalizeLogLine = (line: string): string =>
+  line
+    .replace(/(^\r\n|\r\n$)/g, "")
+    .replace(/[\x1B\x07](\[[^\\;\]]{1,4})?/g, "")
+    .replaceAll("m]0;", "");
+
 const formatSteamCmdProgress = (progress: IProgress): string =>
-  `${progress.state} [${progress.stateCode}]: ${progress.progressPercent} % (${progress.progressAmount}/${progress.progressTotalAmount})`;
+  `${progress.state} [${progress.stateCode}]: ${progress.progressPercent} % (${progress.progressAmount} / ${progress.progressTotalAmount})`;
 
 export class ServerRunner {
   private static _instance: ServerRunner;
@@ -63,7 +68,7 @@ export class ServerRunner {
   private readonly _serverExePath: string;
   private readonly _serverConfigPath: string;
 
-  private _serverProcess: ChildProcess | undefined;
+  private _serverProcess: pty.IPty | undefined;
 
   private readonly _subscribers: Map<number, ISubscribeCallback>;
 
@@ -108,9 +113,12 @@ export class ServerRunner {
   }
 
   private createDeathHandler =
-    (resolve: VoidFunction) =>
-    (code: number | null, signal: NodeJS.Signals) => {
-      this.setState((current) => ({ status: "stopped", log: current.log }));
+    (resolve: VoidFunction) => (code: number, signal?: number) => {
+      this.setState((current) => ({
+        status: "stopped",
+        log: current.log,
+        info: current.info,
+      }));
 
       this._serverProcess = undefined;
 
@@ -120,19 +128,29 @@ export class ServerRunner {
     };
 
   private createLogHandler = (resolve: VoidFunction) => (data: string) => {
+    const normalizedData = normalizeLogLine(data);
+
+    if (!normalizedData) {
+      return;
+    }
+
     const info: IApiServerStateInfo = {
-      gameVersion: data.match(INFO_GAME_VERSION_RE)?.[1],
-      baseCount: toNumberIfDefined(data.match(INFO_BASE_COUNT_RE)?.[1]),
-      entityCount: toNumberIfDefined(data.match(INFO_ENTITY_COUNT_RE)?.[1]),
-      publicIp: data.match(INFO_PUBLIC_IP_RE)?.[1],
-      lastSaved: INFO_LAST_SAVED_RE.test(data)
+      gameVersion: normalizedData.match(INFO_GAME_VERSION_RE)?.[1],
+      baseCount: toNumberIfDefined(
+        normalizedData.match(INFO_BASE_COUNT_RE)?.[1],
+      ),
+      entityCount: toNumberIfDefined(
+        normalizedData.match(INFO_ENTITY_COUNT_RE)?.[1],
+      ),
+      publicIp: normalizedData.match(INFO_PUBLIC_IP_RE)?.[1],
+      lastSaved: INFO_LAST_SAVED_RE.test(normalizedData)
         ? formatDatetime(new Date(), true)
         : undefined,
     };
 
-    const newLogEntry = `${getTimestamp()} ${data}`;
+    const newLogEntry = `${getTimestamp()} ${normalizedData}`;
 
-    if (SERVER_START_RE.test(data)) {
+    if (SERVER_START_RE.test(normalizedData)) {
       this.setState((current) => ({
         status: "running",
         started: new Date().toISOString(),
@@ -191,9 +209,12 @@ export class ServerRunner {
       this.setState({ status: "starting" });
 
       try {
-        this._serverProcess = execFile(this._serverExePath);
+        this._serverProcess = pty.spawn(this._serverExePath, [], {
+          handleFlowControl: true,
+          cols: 500,
+        });
 
-        this._serverProcess.stdout?.on("data", this.createLogHandler(resolve));
+        this._serverProcess.on("data", this.createLogHandler(resolve));
       } catch (e) {
         this.setState({ status: "stopped" });
 
@@ -216,11 +237,9 @@ export class ServerRunner {
 
       this.setState((current) => ({ ...current, status: "stopping" }));
 
-      this._serverProcess.on("close", this.createDeathHandler(resolve));
+      this._serverProcess.on("exit", this.createDeathHandler(resolve));
 
-      // Note: Signals aren't supported on Windows, so this won't shut down gracefully, it'll kill it immediately
-      // TODO Figure out a way to gracefully shut down server
-      this._serverProcess.kill("SIGINT");
+      this._serverProcess.write("\x03");
     });
   };
 
@@ -230,9 +249,6 @@ export class ServerRunner {
         LOGGER.info("Server currently running, shutting down for update");
 
         await this.stop();
-
-        // Wait to let the server actually shut down
-        await sleep(5000);
       }
 
       this.setState((current) => ({

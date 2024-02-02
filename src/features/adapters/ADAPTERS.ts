@@ -47,12 +47,20 @@ export const ADAPTERS = {
             ? (current?.savedCount ?? 0) + 1
             : undefined,
         }),
-        playerCount: (data, _current) => ({
-          playerCount: toNumberIfDefined(
-            data.match(/\[online] Added Peer #(\d+)/i)?.[1],
-            1,
-          ),
-        }),
+        playerCount: (data, current) => {
+          let currentPlayerCount = current?.playerCount ?? 0;
+
+          const aPlayerHasJoined = /\[online] Added Peer #\d+/i.test(data);
+          if (aPlayerHasJoined) {
+            currentPlayerCount++;
+          }
+          const aPlayerHasLeft = /\[online] Removed Peer #\d+/i.test(data);
+          if (aPlayerHasLeft) {
+            currentPlayerCount--;
+          }
+
+          return { playerCount: currentPlayerCount };
+        },
       },
     },
   } satisfies IAdapterSpec<"enshrouded", IEnshroudedServerStateInfo>,

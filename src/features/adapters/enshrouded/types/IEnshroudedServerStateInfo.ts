@@ -5,4 +5,5 @@ export interface IEnshroudedServerStateInfo {
   publicIp?: string;
   lastSaved?: string;
   savedCount?: number;
+  playerCount?: number;
 }

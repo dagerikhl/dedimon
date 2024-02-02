@@ -1,4 +1,4 @@
-import { formatDatetime } from "@/common/utils/formatting/datetime";
+import { ADAPTERS } from "@/features/adapters/ADAPTERS";
 import { IAdapterType } from "@/features/adapters/types/IAdapterType";
 import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
 import { IApiServerState } from "@/features/state/types/IApiServerState";
@@ -12,34 +12,25 @@ type ISetter<S> = S | ((prevState: S) => S);
 type ISubscribeCallback = (state: IApiServerState) => void;
 type IUnsubscribeCallback = () => void;
 
-const SERVER_START_RE = /\[Session] 'HostOnline' \(up\)!/i;
-
-const INFO_GAME_VERSION_RE = /Game Version \(SVN\): (\d+)/i;
-const INFO_BASE_COUNT_RE = /\[savexxx] LOAD (\d+) bases \d+ entities/i;
-const INFO_ENTITY_COUNT_RE = /\[savexxx] LOAD \d+ bases (\d+) entities/i;
-const INFO_PUBLIC_IP_RE = /\[online] Public ipv4: (\d+\.\d+\.\d+\.\d+)/i;
-const INFO_LAST_SAVED_RE = /\[server] Saved/i;
-
-const toNumberIfDefined = (value: string | undefined): number | undefined =>
-  value ? +value : undefined;
-
 const mergeLog = (log: string[] | undefined, newLogEntry: string): string[] => [
   ...(log ?? []),
   newLogEntry,
 ];
 
-const mergeInfo = (
-  info: IApiServerStateInfo | undefined,
-  newInfo: IApiServerStateInfo,
-): IApiServerStateInfo | undefined => {
-  const mergedInfo: IApiServerStateInfo = { ...info };
+const mergeInfo = <Info extends Record<string, any>>(
+  info: IApiServerStateInfo<Info> | undefined,
+  newInfo: IApiServerStateInfo<Info>,
+): IApiServerStateInfo<Info> | undefined => {
+  const mergedInfo: IApiServerStateInfo<Info> = {
+    ...info,
+  } as IApiServerStateInfo<Info>;
 
   for (const [key, value] of Object.entries(newInfo)) {
     if (value === null || value === undefined) {
       continue;
     }
 
-    mergedInfo[key as keyof IApiServerStateInfo] = value;
+    mergedInfo[key as keyof IApiServerStateInfo<Info>] = value;
   }
 
   if (
@@ -64,7 +55,7 @@ const formatSteamCmdProgress = (progress: IProgress): string =>
 export class ServerRunner {
   private static _instance: ServerRunner;
 
-  private readonly _adapter: string;
+  private readonly _adapter: IAdapterType;
   private readonly _appId: string;
   private readonly _serverPath: string;
   private readonly _serverExePath: string;
@@ -93,6 +84,11 @@ export class ServerRunner {
   }
 
   public static getInstance(): ServerRunner {
+    if (!process.env.NEXT_PUBLIC_ADAPTER) {
+      throw new Error(
+        "The NEXT_PUBLIC_ADAPTER environment variable is missing, please make sure it's present in the `.env.local` file at the project root",
+      );
+    }
     if (
       !process.env.APP_ID ||
       !process.env.SERVER_PATH ||
@@ -106,7 +102,7 @@ export class ServerRunner {
 
     if (!ServerRunner._instance) {
       ServerRunner._instance = new ServerRunner(
-        process.env.ADAPTER,
+        process.env.NEXT_PUBLIC_ADAPTER,
         process.env.APP_ID,
         process.env.SERVER_PATH,
         process.env.SERVER_EXE_PATH,
@@ -139,23 +135,26 @@ export class ServerRunner {
       return;
     }
 
-    const info: IApiServerStateInfo = {
-      gameVersion: normalizedData.match(INFO_GAME_VERSION_RE)?.[1],
-      baseCount: toNumberIfDefined(
-        normalizedData.match(INFO_BASE_COUNT_RE)?.[1],
-      ),
-      entityCount: toNumberIfDefined(
-        normalizedData.match(INFO_ENTITY_COUNT_RE)?.[1],
-      ),
-      publicIp: normalizedData.match(INFO_PUBLIC_IP_RE)?.[1],
-      lastSaved: INFO_LAST_SAVED_RE.test(normalizedData)
-        ? formatDatetime(new Date(), true)
-        : undefined,
-    };
+    const adapterSpec = ADAPTERS[this._adapter];
+
+    let info: Record<string, any> = {};
+    for (const [_key, infoGetter] of Object.entries(
+      adapterSpec.stateInfoSpec.infoGetters,
+    )) {
+      info = {
+        ...info,
+        ...infoGetter(normalizedData, this.getState().info),
+      };
+    }
 
     const newLogEntry = `${getTimestamp()} ${normalizedData}`;
 
-    if (SERVER_START_RE.test(normalizedData)) {
+    if (
+      adapterSpec.stateInfoSpec.checkStarted(
+        normalizedData,
+        this.getState().info,
+      )
+    ) {
       this.setState((current) => ({
         status: "running",
         started: new Date().toISOString(),

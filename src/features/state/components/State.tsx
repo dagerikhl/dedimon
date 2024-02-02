@@ -2,6 +2,7 @@
 
 import { Button } from "@/common/components/buttons/Button";
 import { Loader } from "@/common/components/layout/Loader";
+import { useInterval } from "@/common/hooks/useInterval";
 import { useApiServerState } from "@/features/api/state/hooks/useApiServerState";
 import { IApiServerState } from "@/features/state/types/IApiServerState";
 import { IApiServerUpdatePayload } from "@/features/state/types/IApiServerUpdatePayload";
@@ -16,7 +17,7 @@ import {
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
 import axios, { AxiosResponse } from "axios";
-import { useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import styles from "./State.module.scss";
 
 const getUptime = (started: string | undefined): string => {
@@ -34,7 +35,15 @@ export const State = () => {
 
   const state = useApiServerState();
 
-  const uptime = useMemo(() => getUptime(state.started), [state.started]);
+  const [uptime, setUptime] = useState(getUptime(state.started));
+
+  useInterval(
+    useCallback(() => {
+      setUptime(getUptime(state.started));
+    }, [state.started]),
+    10 * 1000,
+    true,
+  );
 
   const handleStartServer = async () => {
     setIsLoading(true);

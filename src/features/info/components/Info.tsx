@@ -6,7 +6,7 @@ import { camelCaseToTitleCase } from "@/common/utils/formatting/text";
 import { useApiServerState } from "@/features/api/state/hooks/useApiServerState";
 import { Fragment } from "react";
 
-export const Info = () => {
+export const Info = <T extends Record<string, any>>() => {
   const state = useApiServerState();
 
   return (
@@ -16,7 +16,7 @@ export const Info = () => {
           {Object.entries(state.info).map(([key, value]) => (
             <Fragment key={key}>
               <dt>{camelCaseToTitleCase(key)}:</dt>
-              <dl>{value}</dl>
+              <dl title={`Type: ${typeof value}`}>{value}</dl>
             </Fragment>
           ))}
         </Dl>

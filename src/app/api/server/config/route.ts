@@ -1,3 +1,5 @@
+import { ADAPTERS } from "@/features/adapters/ADAPTERS";
+import { IEnshroudedServerConfig } from "@/features/adapters/enshrouded/types/IEnshroudedServerConfig";
 import { IApiServerConfig } from "@/features/config/types/IApiServerConfig";
 import {
   parseConfig,
@@ -6,7 +8,7 @@ import {
 import fs from "fs/promises";
 import path from "path";
 
-type INoAdapterConfig = Record<string, any>;
+const ADAPTER = ADAPTERS[process.env.NEXT_PUBLIC_ADAPTER];
 
 export const GET = async () => {
   if (!process.env.SERVER_CONFIG_PATH) {
@@ -30,12 +32,18 @@ export const POST = async (req: Request) => {
     );
   }
 
-  const body = (await req.json()) as IApiServerConfig<INoAdapterConfig>;
+  switch (ADAPTER.id) {
+    case "enshrouded":
+      const body =
+        (await req.json()) as IApiServerConfig<IEnshroudedServerConfig>;
 
-  await fs.writeFile(
-    path.resolve(process.env.SERVER_CONFIG_PATH),
-    stringifyConfig(body),
-  );
+      await fs.writeFile(
+        path.resolve(process.env.SERVER_CONFIG_PATH),
+        stringifyConfig(body),
+      );
+
+      break;
+  }
 
   return new Response();
 };

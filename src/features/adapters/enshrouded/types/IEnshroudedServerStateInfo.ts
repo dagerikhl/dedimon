@@ -6,4 +6,6 @@ export interface IEnshroudedServerStateInfo {
   lastSaved?: string;
   savedCount?: number;
   playerCount?: number;
+  lastLoggedOn?: string;
+  lastLoggedOff?: string;
 }

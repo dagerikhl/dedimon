@@ -2,6 +2,13 @@ import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { IEnshroudedServerStateInfo } from "@/features/adapters/enshrouded/types/IEnshroudedServerStateInfo";
 import { IAdapterSpec } from "./types/IAdapterSpec";
 
+// Enshrouded START
+
+const ENSHROUDED_PLAYER_JOINED_RE = /\[online] Added Peer #\d+/i;
+const ENSHROUDED_PLAYER_LEFT_RE = /\[online] Removed Peer #\d+/i;
+
+// Enshrouded END
+
 const toNumberIfDefined = (
   value: string | undefined,
   offset?: number,
@@ -49,18 +56,25 @@ export const ADAPTERS = {
         }),
         playerCount: (data, current) => {
           let currentPlayerCount = current?.playerCount ?? 0;
-
-          const aPlayerHasJoined = /\[online] Added Peer #\d+/i.test(data);
-          if (aPlayerHasJoined) {
+          if (ENSHROUDED_PLAYER_JOINED_RE.test(data)) {
             currentPlayerCount++;
           }
-          const aPlayerHasLeft = /\[online] Removed Peer #\d+/i.test(data);
-          if (aPlayerHasLeft) {
+          if (ENSHROUDED_PLAYER_LEFT_RE.test(data)) {
             currentPlayerCount--;
           }
 
           return { playerCount: currentPlayerCount };
         },
+        lastLoggedOn: (data, _current) => ({
+          lastLoggedOn: ENSHROUDED_PLAYER_JOINED_RE.test(data)
+            ? formatDatetime(new Date(), true)
+            : undefined,
+        }),
+        lastLoggedOff: (data, _current) => ({
+          lastLoggedOff: ENSHROUDED_PLAYER_LEFT_RE.test(data)
+            ? formatDatetime(new Date(), true)
+            : undefined,
+        }),
       },
     },
   } satisfies IAdapterSpec<"enshrouded", IEnshroudedServerStateInfo>,

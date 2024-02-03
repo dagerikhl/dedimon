@@ -4,7 +4,7 @@
   grid-template-areas:
     "status start uptime"
     "status stop update";
-  grid-template-columns: 80px auto 1fr;
+  grid-template-columns: 100px auto 1fr;
   grid-template-rows: auto auto;
   justify-items: center;
   align-items: center;
@@ -14,7 +14,7 @@
 .status {
   grid-area: status;
   justify-self: stretch;
-  padding: var(--space-small);
+  padding: var(--space-large);
   border: 1px solid var(--brd-pri);
   border-radius: var(--border-radius);
 }

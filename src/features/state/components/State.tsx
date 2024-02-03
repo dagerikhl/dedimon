@@ -94,54 +94,50 @@ export const State = () => {
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.containerInner}>
-          <div>
-            Status: <ServerStatus status={state.status} />
-          </div>
+        <ServerStatus className={styles.status} status={state.status} />
 
-          <div
-            title={`Started: ${state.started ? formatDatetime(state.started, true) : "-"}`}
-          >
-            Uptime: {uptime}
-          </div>
+        <div className={styles.uptime}>
+          Uptime: {uptime}{" "}
+          {state.started ? (
+            <span className={styles.uptimeStarted}>
+              ({formatDatetime(state.started)})
+            </span>
+          ) : null}
         </div>
 
-        <div className={styles.containerInner}>
-          <div className={styles.groupHorizontal}>
-            <Button
-              variant="success"
-              icon={faPlay}
-              disabled={state.status !== "stopped"}
-              onClick={handleStartServer}
-            >
-              Start server
-            </Button>
+        <Button
+          className={styles.start}
+          variant="success"
+          icon={faPlay}
+          disabled={state.status !== "stopped"}
+          onClick={handleStartServer}
+        >
+          Start server
+        </Button>
 
-            <Button
-              variant="error"
-              icon={faStop}
-              disabled={state.status !== "running"}
-              onClick={handleStopServer}
-            >
-              Stop server
-            </Button>
-          </div>
+        <Button
+          className={styles.stop}
+          variant="error"
+          icon={faStop}
+          disabled={state.status !== "running"}
+          onClick={handleStopServer}
+        >
+          Stop server
+        </Button>
 
-          <div className={styles.groupHorizontal}>
-            <Button
-              variant="accent"
-              icon={faCloudArrowUp}
-              disabled={
-                state.status === "offline" ||
-                state.status === "starting" ||
-                state.status === "stopping"
-              }
-              onClick={handleUpdateServer}
-            >
-              Update server
-            </Button>
-          </div>
-        </div>
+        <Button
+          className={styles.update}
+          variant="accent"
+          icon={faCloudArrowUp}
+          disabled={
+            state.status === "offline" ||
+            state.status === "starting" ||
+            state.status === "stopping"
+          }
+          onClick={handleUpdateServer}
+        >
+          Update server
+        </Button>
       </div>
 
       <Loader

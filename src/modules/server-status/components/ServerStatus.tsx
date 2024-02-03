@@ -5,17 +5,22 @@ import {
   getServerStatusIconProps,
 } from "@/modules/server-status/utils/formatting";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import cz from "classnames";
+import styles from "./ServerStatus.module.scss";
 
 export interface IServerStatusProps {
+  className?: string;
   status?: IServerStatus;
 }
 
-export const ServerStatus = ({ status }: IServerStatusProps) => (
-  <span>
-    {formatServerStatus(status)}{" "}
+export const ServerStatus = ({ className, status }: IServerStatusProps) => (
+  <div className={cz(className, styles.container)}>
     <FontAwesomeIcon
       {...getServerStatusIconProps(status)}
+      size="2xl"
       color={getServerStatusColor(status)}
     />
-  </span>
+
+    <div>{formatServerStatus(status)}</div>
+  </div>
 );

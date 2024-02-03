@@ -1,21 +1,42 @@
 .container {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-medium);
+  display: grid;
+  grid-template-areas:
+    "status start uptime"
+    "status stop update";
+  grid-template-columns: 80px auto 1fr;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  align-items: center;
+  gap: var(--space-medium) var(--space-large);
 }
 
-.containerInner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-medium);
+.status {
+  grid-area: status;
+  justify-self: stretch;
+  padding: var(--space-small);
+  border: 1px solid var(--brd-pri);
+  border-radius: var(--border-radius);
 }
 
-.groupHorizontal {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-small);
+.uptime {
+  grid-area: uptime;
+  justify-self: end;
+
+  .uptimeStarted {
+    color: var(--frt-sec);
+  }
+}
+
+.start {
+  grid-area: start;
+}
+
+.stop {
+  grid-area: stop;
+}
+
+.update {
+  grid-area: update;
+  justify-self: end;
 }

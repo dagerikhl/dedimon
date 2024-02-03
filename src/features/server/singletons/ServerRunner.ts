@@ -138,9 +138,7 @@ export class ServerRunner {
     const adapterSpec = ADAPTERS[this._adapter];
 
     let info: Record<string, any> = {};
-    for (const [_key, infoGetter] of Object.entries(
-      adapterSpec.stateInfoSpec.infoGetters,
-    )) {
+    for (const infoGetter of adapterSpec.stateInfoSpec.infoGetters) {
       info = {
         ...info,
         ...infoGetter(normalizedData, this.getState().info),

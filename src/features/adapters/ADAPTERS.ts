@@ -2,12 +2,11 @@ import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { IEnshroudedServerStateInfo } from "@/features/adapters/enshrouded/types/IEnshroudedServerStateInfo";
 import { IAdapterSpec } from "./types/IAdapterSpec";
 
-// Enshrouded START
-
-const ENSHROUDED_PLAYER_JOINED_RE = /\[online] Added Peer #\d+/i;
-const ENSHROUDED_PLAYER_LEFT_RE = /\[online] Removed Peer #\d+/i;
-
-// Enshrouded END
+const ENSHROUDED_RE = {
+  serverSaved: /\[server] Saved/i,
+  playerJoined: /\[online] Added Peer #\d+/i,
+  playerLeft: /\[online] Removed Peer #\d+/i,
+};
 
 const toNumberIfDefined = (
   value: string | undefined,
@@ -25,57 +24,57 @@ export const ADAPTERS = {
     stateInfoSpec: {
       checkStarted: (data, _current) =>
         /\[Session] 'HostOnline' \(up\)!/i.test(data),
-      infoGetters: {
-        gameVersion: (data, _current) => ({
+      infoGetters: [
+        (data, _current) => ({
           gameVersion: data.match(/Game Version \(SVN\): (\d+)/i)?.[1],
         }),
-        baseCount: (data, _current) => ({
-          baseCount: toNumberIfDefined(
-            data.match(/\[savexxx] LOAD (\d+) bases \d+ entities/i)?.[1],
-          ),
-        }),
-        entityCount: (data, _current) => ({
-          entityCount: toNumberIfDefined(
-            data.match(/\[savexxx] LOAD \d+ bases (\d+) entities/i)?.[1],
-          ),
-        }),
-        publicIp: (data, _current) => ({
+        (data, _current) => {
+          const countingMatches = data.match(
+            /\[savexxx] LOAD (\d+) bases (\d+) entities/i,
+          );
+
+          return {
+            baseCount: toNumberIfDefined(countingMatches?.[1]),
+            entityCount: toNumberIfDefined(countingMatches?.[2]),
+          };
+        },
+        (data, _current) => ({
           publicIp: data.match(
             /\[online] Public ipv4: (\d+\.\d+\.\d+\.\d+)/i,
           )?.[1],
         }),
-        lastSaved: (data, _current) => ({
-          lastSaved: /\[server] Saved/i.test(data)
+        (data, current) => ({
+          lastSaved: ENSHROUDED_RE.serverSaved.test(data)
             ? formatDatetime(new Date(), true)
             : undefined,
-        }),
-        savedCount: (data, current) => ({
-          savedCount: /\[server] Saved/i.test(data)
+          savedCount: ENSHROUDED_RE.serverSaved.test(data)
             ? (current?.savedCount ?? 0) + 1
             : undefined,
         }),
-        playerCount: (data, current) => {
+        (data, current) => {
           let currentPlayerCount = current?.playerCount ?? 0;
-          if (ENSHROUDED_PLAYER_JOINED_RE.test(data)) {
+          let isJoinEvent = false;
+          let isLeaveEvent = false;
+          if (ENSHROUDED_RE.playerJoined.test(data)) {
+            isJoinEvent = true;
             currentPlayerCount++;
           }
-          if (ENSHROUDED_PLAYER_LEFT_RE.test(data)) {
+          if (ENSHROUDED_RE.playerLeft.test(data)) {
+            isLeaveEvent = true;
             currentPlayerCount--;
           }
 
-          return { playerCount: currentPlayerCount };
+          return {
+            playerCount: currentPlayerCount,
+            lastLoggedOn: isJoinEvent
+              ? formatDatetime(new Date(), true)
+              : undefined,
+            lastLoggedOff: isLeaveEvent
+              ? formatDatetime(new Date(), true)
+              : undefined,
+          };
         },
-        lastLoggedOn: (data, _current) => ({
-          lastLoggedOn: ENSHROUDED_PLAYER_JOINED_RE.test(data)
-            ? formatDatetime(new Date(), true)
-            : undefined,
-        }),
-        lastLoggedOff: (data, _current) => ({
-          lastLoggedOff: ENSHROUDED_PLAYER_LEFT_RE.test(data)
-            ? formatDatetime(new Date(), true)
-            : undefined,
-        }),
-      },
+      ],
     },
   } satisfies IAdapterSpec<"enshrouded", IEnshroudedServerStateInfo>,
 };

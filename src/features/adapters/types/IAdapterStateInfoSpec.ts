@@ -12,5 +12,5 @@ export type IAdapterStateInfoGetter<Info extends Record<string, any>> = (
 
 export interface IAdapterStateInfoSpec<Info extends Record<string, any>> {
   checkStarted: IAdapterStateInfoCheckStarted<Info>;
-  infoGetters: Record<keyof Info, IAdapterStateInfoGetter<Info>>;
+  infoGetters: IAdapterStateInfoGetter<Info>[];
 }

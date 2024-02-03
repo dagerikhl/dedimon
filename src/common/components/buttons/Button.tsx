@@ -1,3 +1,4 @@
+import { whenDefined } from "@/common/utils/general/whenDefined";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {
   FontAwesomeIcon,
@@ -27,7 +28,11 @@ export const Button = ({
   children,
   ...rest
 }: IButtonProps) => (
-  <button className={cz(className, styles.button, styles[variant])} {...rest}>
+  <button
+    className={cz(className, styles.button, styles[variant])}
+    title={whenDefined<string>(children as any, "string")}
+    {...rest}
+  >
     {children} {icon && <FontAwesomeIcon icon={icon} {...iconProps} />}
   </button>
 );

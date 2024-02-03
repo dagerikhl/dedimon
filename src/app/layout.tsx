@@ -1,4 +1,4 @@
-import { EventSourceProvider } from "@/common/providers/EventSourceProvider/EventSourceProvider";
+import { SseServerStateProvider } from "@/features/api/state/providers/SseServerStateProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -17,15 +17,13 @@ export const metadata: Metadata = {
   description: "Dedicated server monitor",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: ReactNode;
-}>) {
+type IRootLayoutProps = Readonly<{ children: ReactNode }>;
+
+export default function RootLayout({ children }: IRootLayoutProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <EventSourceProvider>
+        <SseServerStateProvider>
           <header className={styles.header}>
             <h1>Dedimon</h1>
 
@@ -33,7 +31,7 @@ export default function RootLayout({
           </header>
 
           {children}
-        </EventSourceProvider>
+        </SseServerStateProvider>
       </body>
     </html>
   );

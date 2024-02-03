@@ -7,7 +7,7 @@
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@babel/runtime@^7.23.2":
+"@babel/runtime@^7.1.5", "@babel/runtime@^7.23.2":
   version "7.23.9"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.9.tgz#47791a15e4603bb5f905bc0753801cf21d6345f7"
   integrity sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==
@@ -2400,6 +2400,13 @@ react-dom@18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
+
+react-hooks-sse@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-hooks-sse/-/react-hooks-sse-2.1.0.tgz#c48cb10896ee5e351422454d3fcd342fd3525245"
+  integrity sha512-w7gFWUd8BPfb1bnB5A7zNX2scSttKQQeozJ/jJV0Bnh+7sXeWz+KMwtrEPRrzUzt0CvL7C1ClHJvO3s5pBVJFQ==
+  dependencies:
+    "@babel/runtime" "^7.1.5"
 
 react-is@^16.13.1:
   version "16.13.1"

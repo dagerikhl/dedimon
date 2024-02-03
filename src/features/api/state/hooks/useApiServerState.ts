@@ -1,17 +1,7 @@
-import { useEventSource } from "@/common/hooks/useEventSource";
 import { IApiServerState } from "@/features/state/types/IApiServerState";
-import { useCallback, useState } from "react";
+import { useSSE } from "react-hooks-sse";
 
-export const useApiServerState = (): IApiServerState => {
-  const [state, setState] = useState<IApiServerState>({ status: "offline" });
+const INITIAL_STATE: IApiServerState = { status: "offline" };
 
-  useEventSource<IApiServerState>({
-    url: "/api/server/state",
-    id: "state",
-    onMessage: useCallback((data) => {
-      setState(data);
-    }, []),
-  });
-
-  return state;
-};
+export const useApiServerState = (): IApiServerState =>
+  useSSE("message", INITIAL_STATE);

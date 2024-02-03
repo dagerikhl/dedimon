@@ -1,7 +1,7 @@
 import { SseServerStateProvider } from "@/features/api/state/providers/SseServerStateProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Fira_Sans as Font } from "next/font/google";
 import { ReactNode } from "react";
 import "normalize.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -10,7 +10,10 @@ import styles from "./layout.module.scss";
 
 config.autoAddCss = false;
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Font({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Dedimon",

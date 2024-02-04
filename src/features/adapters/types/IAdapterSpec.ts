@@ -7,6 +7,13 @@ export interface IAdapterSpec<
   Info extends Record<string, any>,
 > {
   id: A;
+  name?: string;
+  logo?: {
+    src: string;
+    height: number;
+    width: number;
+    omitTextFromLogoBanner?: boolean;
+  };
   configSpec: IAdapterConfigSpec;
   stateInfoSpec: IAdapterStateInfoSpec<Info>;
 }

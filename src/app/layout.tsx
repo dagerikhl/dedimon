@@ -1,3 +1,4 @@
+import { PageHeader } from "@/common/components/page/PageHeader";
 import { SseServerStateProvider } from "@/features/api/state/providers/SseServerStateProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
@@ -6,7 +7,6 @@ import { ReactNode } from "react";
 import "normalize.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "./globals.scss";
-import styles from "./layout.module.scss";
 
 config.autoAddCss = false;
 
@@ -27,11 +27,7 @@ export default function RootLayout({ children }: IRootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         <SseServerStateProvider>
-          <header className={styles.header}>
-            <h1>Dedimon</h1>
-
-            <p>&copy; dagerikhl 2024 &ndash;</p>
-          </header>
+          <PageHeader />
 
           {children}
         </SseServerStateProvider>

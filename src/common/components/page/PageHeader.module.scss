@@ -1,8 +1,9 @@
-.header {
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-medium);
   height: var(--header-height);
-  padding: 0 var(--space-medium);
+  padding: var(--space-medium);
   border-bottom: 1px solid var(--brd-pri);
 }

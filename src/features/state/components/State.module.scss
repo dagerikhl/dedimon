@@ -2,8 +2,8 @@
   flex: 1;
   display: grid;
   grid-template-areas:
-    "status start uptime"
-    "status stop update";
+    "status actions uptime"
+    "status actions update";
   grid-template-columns: 100px auto 1fr;
   grid-template-rows: auto auto;
   justify-items: center;
@@ -28,15 +28,24 @@
   }
 }
 
-.start {
-  grid-area: start;
-}
-
-.stop {
-  grid-area: stop;
+.actions {
+  grid-area: actions;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
 }
 
 .update {
   grid-area: update;
   justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-x-small);
+
+  .validateUpdate {
+    display: flex;
+    align-items: center;
+    gap: var(--space-x-small);
+  }
 }

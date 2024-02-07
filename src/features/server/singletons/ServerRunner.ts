@@ -245,7 +245,7 @@ export class ServerRunner {
     });
   };
 
-  public update = async () => {
+  public update = async (validate: boolean) => {
     return new Promise<void>(async (resolve, reject) => {
       if (this._serverProcess) {
         LOGGER.info("Server currently running, shutting down for update");
@@ -268,7 +268,7 @@ export class ServerRunner {
         });
 
         for await (const progress of steamCmd.updateApp(this._appId, {
-          validate: true,
+          validate,
         })) {
           this.setState((current) => ({
             ...current,

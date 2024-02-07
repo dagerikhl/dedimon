@@ -17,7 +17,7 @@ import {
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
 import axios, { AxiosResponse } from "axios";
-import { useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import styles from "./State.module.scss";
 
 const getUptime = (started: string | undefined): string => {
@@ -36,6 +36,8 @@ export const State = () => {
   const state = useApiServerState();
 
   const [uptime, setUptime] = useState(getUptime(state.started));
+
+  const [validateUpdate, setValidateUpdate] = useState(true);
 
   useInterval(
     useCallback(() => {
@@ -81,7 +83,7 @@ export const State = () => {
     axios
       .post<void, AxiosResponse<void>, IApiServerUpdatePayload>(
         "/api/server/state",
-        { action: "update" },
+        { action: "update", validate: validateUpdate },
       )
       .catch((e) => {
         console.error(e);
@@ -89,6 +91,10 @@ export const State = () => {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  const handleValidateUpdateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValidateUpdate(e.target.checked);
   };
 
   return (
@@ -105,39 +111,52 @@ export const State = () => {
           ) : null}
         </div>
 
-        <Button
-          className={styles.start}
-          variant="success"
-          icon={faPlay}
-          disabled={state.status !== "stopped"}
-          onClick={handleStartServer}
-        >
-          Start server
-        </Button>
+        <div className={styles.actions}>
+          <Button
+            variant="success"
+            icon={faPlay}
+            disabled={state.status !== "stopped"}
+            onClick={handleStartServer}
+          >
+            Start server
+          </Button>
 
-        <Button
-          className={styles.stop}
-          variant="error"
-          icon={faStop}
-          disabled={state.status !== "running"}
-          onClick={handleStopServer}
-        >
-          Stop server
-        </Button>
+          <Button
+            variant="error"
+            icon={faStop}
+            disabled={state.status !== "running"}
+            onClick={handleStopServer}
+          >
+            Stop server
+          </Button>
+        </div>
 
-        <Button
-          className={styles.update}
-          variant="accent"
-          icon={faCloudArrowUp}
-          disabled={
-            state.status === "offline" ||
-            state.status === "starting" ||
-            state.status === "stopping"
-          }
-          onClick={handleUpdateServer}
-        >
-          Update server
-        </Button>
+        <div className={styles.update}>
+          <Button
+            variant="accent"
+            icon={faCloudArrowUp}
+            disabled={
+              state.status === "offline" ||
+              state.status === "starting" ||
+              state.status === "stopping"
+            }
+            onClick={handleUpdateServer}
+          >
+            Update server
+          </Button>
+
+          <label
+            className={styles.validateUpdate}
+            title="Validate game files after update?"
+          >
+            <input
+              type="checkbox"
+              checked={validateUpdate}
+              onChange={handleValidateUpdateChange}
+            />
+            Validate?
+          </label>
+        </div>
       </div>
 
       <Loader

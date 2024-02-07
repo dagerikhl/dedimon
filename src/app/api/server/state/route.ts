@@ -66,7 +66,7 @@ export const POST = async (req: Request) => {
     case "update":
       LOGGER.info("[state] Updating server...");
 
-      await serverRunner.update();
+      await serverRunner.update(body.validate);
 
       LOGGER.info("[state] Server updated");
       break;

@@ -2,16 +2,18 @@ import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { IEnshroudedServerStateInfo } from "@/features/adapters/enshrouded/types/IEnshroudedServerStateInfo";
 import { IAdapterSpec } from "./types/IAdapterSpec";
 
+const toNumberIfDefined = (
+  value: string | undefined,
+  offset?: number,
+): number | undefined => (value ? +value + (offset ?? 0) : undefined);
+
+// Adapter: enshrouded
+
 const ENSHROUDED_RE = {
   serverSaved: /\[server] Saved/i,
   playerJoined: /\[online] Added Peer #\d+/i,
   playerLeft: /\[online] Removed Peer #\d+/i,
 };
-
-const toNumberIfDefined = (
-  value: string | undefined,
-  offset?: number,
-): number | undefined => (value ? +value + (offset ?? 0) : undefined);
 
 export const ADAPTERS = {
   enshrouded: {

@@ -4,9 +4,19 @@
   overflow-y: scroll;
   padding: var(--space-small);
 
-  > p {
-    padding-left: 2ch;
-    text-indent: -2ch;
+  .line {
+    display: flex;
+    gap: var(--space-x-small);
+
+    .timestamp {
+      color: var(--col-acc);
+      white-space: nowrap;
+    }
+
+    .text {
+      padding-left: 2ch;
+      text-indent: -2ch;
+    }
   }
 
   > *:not(.scrollAnchor) {

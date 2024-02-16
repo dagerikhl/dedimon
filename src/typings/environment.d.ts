@@ -7,7 +7,7 @@ declare global {
       APP_ID?: string;
       SERVER_PATH?: string;
       SERVER_EXE_PATH?: string;
-      SERVER_CONFIG_PATH?: string;
+      SERVER_CONFIG_PATHS?: string;
     }
   }
 }

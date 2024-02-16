@@ -45,7 +45,7 @@ const mergeInfo = <Info extends Record<string, any>>(
 
 const normalizeLogLine = (line: string): string =>
   line
-    .replace(/(^\r\n|\r\n$)/g, "")
+    .replace(/(^\r?\n|\r?\n$)/g, "")
     .replace(/[\x1B\x07](\[[^\\;\]]{1,4})?/g, "")
     .replaceAll("m]0;", "");
 
@@ -59,7 +59,6 @@ export class ServerRunner {
   private readonly _appId: string;
   private readonly _serverPath: string;
   private readonly _serverExePath: string;
-  private readonly _serverConfigPath: string;
 
   private _serverProcess: pty.IPty | undefined;
 
@@ -72,13 +71,11 @@ export class ServerRunner {
     appId: string,
     serverPath: string,
     serverExePath: string,
-    serverConfigPath: string,
   ) {
     this._adapter = adapter;
     this._appId = appId;
     this._serverPath = path.resolve(serverPath);
     this._serverExePath = path.resolve(serverExePath);
-    this._serverConfigPath = path.resolve(serverConfigPath);
 
     this._subscribers = new Map();
   }
@@ -93,10 +90,10 @@ export class ServerRunner {
       !process.env.APP_ID ||
       !process.env.SERVER_PATH ||
       !process.env.SERVER_EXE_PATH ||
-      !process.env.SERVER_CONFIG_PATH
+      !process.env.SERVER_CONFIG_PATHS
     ) {
       throw new Error(
-        "Unable to find all the required environment variables [APP_ID, SERVER_PATH, SERVER_EXE_PATH, SERVER_CONFIG_PATH], please make sure they are present in the `.env.local` file at the project root",
+        "Unable to find all the required environment variables [APP_ID, SERVER_PATH, SERVER_EXE_PATH, SERVER_CONFIG_PATHS], please make sure they are present in the `.env.local` file at the project root",
       );
     }
 
@@ -106,7 +103,6 @@ export class ServerRunner {
         process.env.APP_ID,
         process.env.SERVER_PATH,
         process.env.SERVER_EXE_PATH,
-        process.env.SERVER_CONFIG_PATH,
       );
     }
 

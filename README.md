@@ -17,17 +17,25 @@ NEXT_PUBLIC_ADAPTER="<one of the supported adapters, see below>"
 APP_ID="<steam app id>"
 SERVER_PATH="<path to your server directory>"
 SERVER_EXE_PATH="<path to your server executable>"
-SERVER_CONFIG_PATH="<path to your server config file>"
+SERVER_CONFIG_PATHS="<path to your server config file>"
 ```
 
-Example:
+Examples:
 
 ```dotenv
 NEXT_PUBLIC_ADAPTER="enshrouded"
 APP_ID="2278520"
 SERVER_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer"
 SERVER_EXE_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded_server.exe"
-SERVER_CONFIG_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded_server.json"
+SERVER_CONFIG_PATHS="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded_server.json"
+```
+
+```dotenv
+NEXT_PUBLIC_ADAPTER="v-rising"
+APP_ID="1604030"
+SERVER_PATH="C:\Games\Steam\steamapps\common\VRisingDedicatedServer"
+SERVER_EXE_PATH="C:\Games\Steam\steamapps\common\VRisingDedicatedServer\VRisingServer.exe"
+SERVER_CONFIG_PATHS="C:\Games\Steam\steamapps\common\VRisingDedicatedServer\ServerHostSettings.json,C:\Games\Steam\steamapps\common\VRisingDedicatedServer\ServerGameSettings.json"
 ```
 
 ### Adapters
@@ -35,6 +43,7 @@ SERVER_CONFIG_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded_
 Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts`):
 
 - `enshrouded`
+- `v-rising`
 
 ## Getting Started
 

@@ -1,13 +1,26 @@
-import { ADAPTERS } from "@/features/adapters/ADAPTERS";
-import { IApiServerConfig } from "@/features/config/types/IApiServerConfig";
+import { IAdapterConfigSpec } from "@/features/adapters/types/IAdapterConfigSpec";
 
-const ADAPTER = ADAPTERS[process.env.NEXT_PUBLIC_ADAPTER];
-
-export const parseConfig = <T extends Record<string, any>>(
+export const parseConfig = <T>(
   configStr: string,
-): IApiServerConfig<T> => JSON.parse(configStr);
+  configSpec: IAdapterConfigSpec,
+): T => {
+  if (configSpec.type === "json") {
+    return JSON.parse(configStr);
+  }
 
-export const stringifyConfig = <T extends Record<string, any>>(
-  config: IApiServerConfig<T>,
-): string =>
-  `${JSON.stringify(config, null, ADAPTER.configSpec.indent)}${ADAPTER.configSpec.newlineEof ? "\n" : ""}`;
+  throw new Error(`Config spec "${configSpec.type}" not supported`);
+};
+
+export const stringifyConfig = <T>(
+  config: T,
+  configSpec: IAdapterConfigSpec,
+): string => {
+  if (configSpec.type === "json") {
+    return `${JSON.stringify(config, null, configSpec.indent).replace(/(\r)?\n/g, configSpec.newline)}${configSpec.newlineEof ? configSpec.newline : ""}`;
+  }
+
+  throw new Error(`Config spec "${configSpec.type}" not supported`);
+};
+
+export const normalizeConfig = (configStr: string): string =>
+  configStr.replace(/[\u200B-\u200D\uFEFF]/g, "");

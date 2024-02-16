@@ -14,6 +14,6 @@ export interface IAdapterSpec<
     width: number;
     omitTextFromLogoBanner?: boolean;
   };
-  configSpec: IAdapterConfigSpec;
+  configSpecs: Record<string, IAdapterConfigSpec>;
   stateInfoSpec: IAdapterStateInfoSpec<Info>;
 }

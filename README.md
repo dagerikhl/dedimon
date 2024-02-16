@@ -32,7 +32,7 @@ SERVER_CONFIG_PATHS="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded
 
 ```dotenv
 NEXT_PUBLIC_ADAPTER="v-rising"
-APP_ID="1604030"
+APP_ID="1829350"
 SERVER_PATH="C:\Games\Steam\steamapps\common\VRisingDedicatedServer"
 SERVER_EXE_PATH="C:\Games\Steam\steamapps\common\VRisingDedicatedServer\VRisingServer.exe"
 SERVER_CONFIG_PATHS="C:\Games\Steam\steamapps\common\VRisingDedicatedServer\ServerHostSettings.json,C:\Games\Steam\steamapps\common\VRisingDedicatedServer\ServerGameSettings.json"

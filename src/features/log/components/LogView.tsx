@@ -1,6 +1,7 @@
 "use client";
 
 import { Code } from "@/common/components/formatting/Code";
+import { getLogLineParts } from "@/features/log/utils/parsing";
 import { useEffect, useRef, useState } from "react";
 import styles from "./LogView.module.scss";
 
@@ -40,16 +41,11 @@ export const LogView = ({ log }: ILogViewProps) => {
   return (
     <Code ref={scrollContainerRef} className={styles.container}>
       {lines.map((line, i) => {
-        let timestamp: string | undefined = undefined;
-        let logLine = line;
-        if (/^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(line)) {
-          timestamp = line.slice(0, 21);
-          logLine = line.slice(22);
-        }
+        const [timestamp, logLine] = getLogLineParts(line);
 
         return (
           <div key={i} className={styles.line}>
-            {timestamp && <div className={styles.timestamp}>{timestamp}</div>}
+            {timestamp && <div className={styles.timestamp}>[{timestamp}]</div>}
             <div className={styles.text}>{logLine}</div>
           </div>
         );

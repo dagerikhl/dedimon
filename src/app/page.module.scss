@@ -2,6 +2,7 @@
   display: grid;
   grid-template-areas:
     "state"
+    "status"
     "config"
     "info"
     "log";
@@ -15,7 +16,8 @@
   @media screen and (min-width: 1024px) {
     grid-template-areas:
       "state state log"
-      "info config log"
+      "status status log"
+      "status status log"
       "info config log"
       "info config log"
       "info config log"
@@ -32,6 +34,10 @@
 
 .state {
   grid-area: state;
+}
+
+.status {
+  grid-area: status;
 }
 
 .info {

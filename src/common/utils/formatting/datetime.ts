@@ -1,4 +1,9 @@
-import { format, formatDuration, intervalToDuration } from "date-fns";
+import {
+  addMinutes,
+  format,
+  formatDuration,
+  intervalToDuration,
+} from "date-fns";
 
 type IDateType = number | string | Date;
 
@@ -13,3 +18,13 @@ export const formatUptime = (start: IDateType, end: IDateType): string =>
     zero: true,
     delimiter: ", ",
   });
+
+export const getMinuteMark = (date: IDateType, offset?: number): string => {
+  const minuteMarkFormat = "yyyy-MM-dd HH:mm";
+
+  if (offset) {
+    return format(addMinutes(date, offset), minuteMarkFormat);
+  }
+
+  return format(date, minuteMarkFormat);
+};

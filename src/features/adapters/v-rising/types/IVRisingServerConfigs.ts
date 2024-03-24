@@ -29,14 +29,14 @@ export interface IVRisingServerConfigs {
     };
   };
   "ServerGameSettings.json": {
-    GameModeType?: "PvP";
-    CastleDamageMode?: "Always";
-    SiegeWeaponHealth?: "Normal";
-    PlayerDamageMode?: "Always";
-    CastleHeartDamageMode?: "CanBeDestroyedByPlayers";
-    PvPProtectionMode?: "Medium";
-    DeathContainerPermission?: "Anyone";
-    RelicSpawnType?: "Unique";
+    GameModeType?: string;
+    CastleDamageMode?: string;
+    SiegeWeaponHealth?: string;
+    PlayerDamageMode?: string;
+    CastleHeartDamageMode?: string;
+    PvPProtectionMode?: string;
+    DeathContainerPermission?: string;
+    RelicSpawnType?: string;
     CanLootEnemyContainers?: boolean;
     BloodBoundEquipment?: boolean;
     TeleportBoundItems?: boolean;
@@ -217,7 +217,7 @@ export interface IVRisingServerConfigs {
       CastleLimit?: number;
     };
     PlayerInteractionSettings?: {
-      TimeZone?: "Local";
+      TimeZone?: string;
       VSPlayerWeekdayTime?: {
         StartHour?: number;
         StartMinute?: number;

@@ -6,6 +6,7 @@
   "engines": {
     "node": ">=18"
   },
+  "type": "module",
   "scripts": {
     "postinstall": "patch-package",
     "prepare": "husky",

@@ -5,4 +5,11 @@ export interface IAdapterConfigSpecJson {
   newlineEof: boolean;
 }
 
-export type IAdapterConfigSpec = IAdapterConfigSpecJson;
+export interface IAdapterConfigSpecXml {
+  type: "xml";
+  indent: string;
+  newline: string;
+  newlineEof: boolean;
+}
+
+export type IAdapterConfigSpec = IAdapterConfigSpecJson | IAdapterConfigSpecXml;

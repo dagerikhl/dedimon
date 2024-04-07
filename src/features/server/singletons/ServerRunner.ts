@@ -59,6 +59,7 @@ export class ServerRunner {
   private readonly _appId: string;
   private readonly _serverPath: string;
   private readonly _serverExePath: string;
+  private readonly _serverExeArgs: string[] | undefined;
 
   private _serverProcess: pty.IPty | undefined;
 
@@ -71,11 +72,13 @@ export class ServerRunner {
     appId: string,
     serverPath: string,
     serverExePath: string,
+    serverExeArgs: string | undefined,
   ) {
     this._adapter = adapter;
     this._appId = appId;
     this._serverPath = path.resolve(serverPath);
     this._serverExePath = path.resolve(serverExePath);
+    this._serverExeArgs = serverExeArgs ? serverExeArgs.split(",") : undefined;
 
     this._subscribers = new Map();
   }
@@ -103,6 +106,7 @@ export class ServerRunner {
         process.env.APP_ID,
         process.env.SERVER_PATH,
         process.env.SERVER_EXE_PATH,
+        process.env.SERVER_EXE_ARGS,
       );
     }
 
@@ -207,12 +211,18 @@ export class ServerRunner {
       this.setState({ status: "starting" });
 
       try {
-        this._serverProcess = pty.spawn(this._serverExePath, [], {
-          handleFlowControl: true,
-          cols: 500,
-        });
+        this._serverProcess = pty.spawn(
+          this._serverExePath,
+          this._serverExeArgs ?? [],
+          {
+            cwd: path.dirname(this._serverExePath),
+            handleFlowControl: true,
+            cols: 500,
+          },
+        );
 
         this._serverProcess.on("data", this.createLogHandler(resolve));
+        this._serverProcess.on("exit", this.createDeathHandler(resolve));
       } catch (e) {
         this.setState({ status: "stopped" });
 

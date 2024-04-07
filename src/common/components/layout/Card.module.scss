@@ -6,9 +6,22 @@
   height: 100%;
   border: 1px solid var(--brd-pri);
   border-radius: var(--border-radius);
+  background-color: var(--bkg-pri);
+
+  &.--fullscreen {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    height: calc(100vh - var(--heading-height) - 1px - var(--space-small) * 5);
+    width: calc(100vw - var(--space-small) * 2);
+    margin: var(--space-small);
+    z-index: 100000;
+  }
 }
 
 .heading {
+  display: flex;
+  justify-content: space-between;
   height: var(--heading-height);
   padding: var(--space-small);
   background-color: var(--bkg-sec);

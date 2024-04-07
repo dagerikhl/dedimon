@@ -9,7 +9,7 @@ import styles from "./page.module.scss";
 export default function Home() {
   return (
     <main className={styles.main}>
-      <Card className={styles.state} heading="State">
+      <Card className={styles.state} heading="State" omitFullscreen>
         <State />
       </Card>
 

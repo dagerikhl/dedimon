@@ -9,16 +9,14 @@ export interface ILoaderProps {
   children?: ReactNode;
 }
 
-export const Loader = ({ isLoading, children }: ILoaderProps) => {
-  return (
-    <div className={cz(styles.container, { [styles.isLoading]: isLoading })}>
-      <div className={styles.overlay} />
+export const Loader = ({ isLoading, children }: ILoaderProps) => (
+  <div className={cz(styles.container, { [styles.isLoading]: isLoading })}>
+    <div className={styles.overlay} />
 
-      <div className={styles.content}>
-        <FontAwesomeIcon icon={faSpinner} size="xl" spinPulse />
+    <div className={styles.content}>
+      <FontAwesomeIcon icon={faSpinner} size="xl" spinPulse />
 
-        {children}
-      </div>
+      {children}
     </div>
-  );
-};
+  </div>
+);

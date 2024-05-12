@@ -12,7 +12,10 @@
     position: absolute;
     top: var(--header-height);
     left: 0;
-    height: calc(100vh - var(--heading-height) - 1px - var(--space-small) * 5);
+    // viewbox-height - header-height - THE FUCK ??? - borders - THE FUCK ???
+    height: calc(
+      100vh - var(--heading-height) - var(--space-small) * 5 - 2px - 1px * 5
+    );
     width: calc(100vw - var(--space-small) * 2);
     margin: var(--space-small);
     z-index: 100000;

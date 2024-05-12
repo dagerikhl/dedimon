@@ -6,7 +6,8 @@ const V_RISING_RE = {
   serverSaved: /Persistence\w* - Finished Saving/i,
   playerJoined:
     /User '\{Steam .+}' '(.+)', approvedUserIndex: \w+, Character: '(.*)' connected as ID '.*', Entity '.*'/i,
-  playerLeft: /SteamPlatformSystem - EndAuthSession platformId: (\w+)/i,
+  playerLeft:
+    /SteamNetworkin\s+SteamNetConnections.ConnectionUpdate:\s+k_ESteamNetworkingConnectionState_ClosedByPeer,\s+\w+/,
 };
 
 export const V_RISING_ADAPTER_SPEC: IAdapterSpec<

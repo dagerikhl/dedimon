@@ -1,0 +1,67 @@
+.container {
+  position: absolute;
+  display: grid;
+  height: 100%;
+  width: 100%;
+  padding: var(--space-small) calc(var(--space-small) + 18px) var(--space-small)
+    var(--space-small);
+  grid-template-areas:
+    "one two thr"
+    "fou fiv six"
+    "sev eig nin";
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(3, auto);
+  pointer-events: none;
+
+  .content {
+    display: flex;
+    gap: var(--space-x-small);
+    pointer-events: auto;
+
+    &.top {
+      grid-area: two;
+      justify-self: center;
+      align-self: start;
+    }
+    &.top-right {
+      grid-area: thr;
+      justify-self: end;
+      align-self: start;
+    }
+    &.right {
+      grid-area: six;
+      justify-self: end;
+      align-self: center;
+    }
+    &.bottom-right {
+      grid-area: nin;
+      justify-self: end;
+      align-self: end;
+    }
+    &.bottom {
+      grid-area: eig;
+      justify-self: center;
+      align-self: end;
+    }
+    &.bottom-left {
+      grid-area: sev;
+      justify-self: start;
+      align-self: end;
+    }
+    &.left {
+      grid-area: fou;
+      justify-self: start;
+      align-self: center;
+    }
+    &.top-left {
+      grid-area: one;
+      justify-self: start;
+      align-self: start;
+    }
+    &.center {
+      grid-area: fiv;
+      justify-self: center;
+      align-self: center;
+    }
+  }
+}

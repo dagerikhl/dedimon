@@ -7,10 +7,25 @@ import {
 
 type IDateType = number | string | Date;
 
+export const formatDatetimeSafe = (
+  date: IDateType,
+  includeSeconds?: boolean,
+  includeMilliseconds?: boolean,
+): string =>
+  format(
+    date,
+    `yyyy-MM-dd-HH-mm${includeSeconds ? "-ss" : ""}${includeMilliseconds ? "-SSS" : ""}`,
+  );
+
 export const formatDatetime = (
   date: IDateType,
   includeSeconds?: boolean,
-): string => format(date, `yyyy-MM-dd HH:mm${includeSeconds ? ":ss" : ""}`);
+  includeMilliseconds?: boolean,
+): string =>
+  format(
+    date,
+    `yyyy-MM-dd HH:mm${includeSeconds ? ":ss" : ""}${includeMilliseconds ? "-SSS" : ""}`,
+  );
 
 export const formatUptime = (start: IDateType, end: IDateType): string =>
   formatDuration(intervalToDuration({ start, end }), {

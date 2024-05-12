@@ -9,11 +9,13 @@
   }
 
   .separator {
+    flex-shrink: 0;
     height: 1px;
     background-color: var(--brd-pri);
   }
 
   .label {
+    flex-shrink: 0;
     height: 8px;
     background-color: var(--bkg-pri-anti);
   }

@@ -3,7 +3,13 @@
 import { Button } from "@/common/components/buttons/Button";
 import { faMaximize, faMinimize } from "@fortawesome/free-solid-svg-icons";
 import cz from "classnames";
-import { DetailedHTMLProps, HTMLAttributes, ReactNode, useState } from "react";
+import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  KeyboardEvent,
+  ReactNode,
+  useState,
+} from "react";
 import styles from "./Card.module.scss";
 
 export interface ICardProps
@@ -27,6 +33,14 @@ export const Card = ({
     setIsFullscreen((current) => !current);
   };
 
+  const handleEscape = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key !== "Escape") {
+      return;
+    }
+
+    setIsFullscreen(false);
+  };
+
   return (
     <section
       className={cz(className, styles.container, {
@@ -43,6 +57,7 @@ export const Card = ({
           <Button
             icon={isFullscreen ? faMinimize : faMaximize}
             onClick={handleToggleFullscreen}
+            onKeyUp={handleEscape}
           />
         )}
       </div>

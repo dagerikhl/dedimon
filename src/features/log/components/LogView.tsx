@@ -45,19 +45,15 @@ export const LogView = ({ log }: ILogViewProps) => {
     setLines(padLog(log));
   }, [log]);
 
-  const getFilename = () =>
-    `Dedimon_Log_${ADAPTER.id}_${formatDatetimeSafe(new Date(), true, true)}`;
-  const [filename, setFilename] = useState(getFilename());
   const content = lines.join("\n");
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(content);
   };
 
-  const handleDownloadHover = () => {
-    setFilename(getFilename());
-  };
   const handleDownload = () => {
+    const filename = `Dedimon_Log_${ADAPTER.id}_${formatDatetimeSafe(new Date(), true, true)}`;
+
     download(filename, content);
   };
 
@@ -83,11 +79,7 @@ export const LogView = ({ log }: ILogViewProps) => {
       <Positioned position="top-right">
         <CopyButton onClick={handleCopy} />
 
-        <DownloadButton
-          name={filename}
-          onMouseOver={handleDownloadHover}
-          onClick={handleDownload}
-        />
+        <DownloadButton onClick={handleDownload} />
       </Positioned>
     </>
   );

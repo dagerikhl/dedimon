@@ -12,7 +12,7 @@
     position: absolute;
     top: var(--header-height);
     left: 0;
-    // viewbox-height - header-height - THE FUCK ??? - borders - THE FUCK ???
+    // viewbox-height - header-height - wat ??? - borders - wat ???
     height: calc(
       100vh - var(--heading-height) - var(--space-small) * 5 - 2px - 1px * 5
     );

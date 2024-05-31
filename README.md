@@ -42,6 +42,15 @@ SERVER_CONFIG_PATHS="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded
 ```
 
 ```dotenv
+NEXT_PUBLIC_ADAPTER="soulmask"
+APP_ID="3017310"
+SERVER_PATH="C:\Games\Servers\Soulmask_Server"
+SERVER_EXE_PATH="C:\Games\Servers\Soulmask_Server\WSServer.exe"
+SERVER_EXE_ARGS=""
+SERVER_CONFIG_PATHS="C:\Games\Servers\Soulmask_Server\Engine.ini"
+```
+
+```dotenv
 NEXT_PUBLIC_ADAPTER="v-rising"
 APP_ID="1829350"
 SERVER_PATH="C:\Games\Steam\steamapps\common\VRisingDedicatedServer"
@@ -57,6 +66,7 @@ Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts` and 
 - [7 Days to Die (`7-days-to-die`)](https://7daystodie.com/)
   - _Note: While the server will start, we're currently unable to proxy the logs from the server, thus rendering several parts of the application unusable._
 - [Enshrouded (`enshrouded`)](https://enshrouded.com/)
+- [Soulmask (`soulmask`)](https://mask.qoolandgames.com/)
 - [V-rising (`v-rising`)](https://playvrising.com/)
 
 ## Getting Started

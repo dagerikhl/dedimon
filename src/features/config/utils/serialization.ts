@@ -4,22 +4,34 @@ export const parseConfig = <T>(
   configStr: string,
   configSpec: IAdapterConfigSpec,
 ): T => {
-  if (configSpec.type === "json") {
-    return JSON.parse(configStr);
+  switch (configSpec.type) {
+    case "ini":
+      return configStr as T;
+    case "json":
+      return JSON.parse(configStr);
+    case "xml":
+      return configStr as T;
   }
-
-  throw new Error(`Config spec "${configSpec.type}" not supported`);
 };
 
 export const stringifyConfig = <T>(
   config: T,
   configSpec: IAdapterConfigSpec,
 ): string => {
-  if (configSpec.type === "json") {
-    return `${JSON.stringify(config, null, configSpec.indent).replace(/(\r)?\n/g, configSpec.newline)}${configSpec.newlineEof ? configSpec.newline : ""}`;
+  let parsedConfig: string;
+  switch (configSpec.type) {
+    case "ini":
+      parsedConfig = config as string;
+      break;
+    case "json":
+      parsedConfig = JSON.stringify(config, null, configSpec.indent);
+      break;
+    case "xml":
+      parsedConfig = config as string;
+      break;
   }
 
-  throw new Error(`Config spec "${configSpec.type}" not supported`);
+  return `${parsedConfig.replace(/(\r)?\n/g, configSpec.newline)}${configSpec.newlineEof ? configSpec.newline : ""}`;
 };
 
 export const normalizeConfig = (configStr: string): string =>

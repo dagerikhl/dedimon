@@ -1,11 +1,3 @@
 export interface ISoulmaskServerStateInfo {
-  gameVersion?: string;
-  baseCount?: number;
-  entityCount?: number;
-  publicIp?: string;
-  lastSaved?: string;
-  savedCount?: number;
-  playerCount?: number;
-  lastLoggedOn?: string;
-  lastLoggedOff?: string;
+  // TODO node-pty is currently unable to proxy logs for this game, thus being unable to parse info
 }

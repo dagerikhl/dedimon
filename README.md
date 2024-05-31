@@ -46,7 +46,7 @@ NEXT_PUBLIC_ADAPTER="soulmask"
 APP_ID="3017310"
 SERVER_PATH="C:\Games\Servers\Soulmask_Server"
 SERVER_EXE_PATH="C:\Games\Servers\Soulmask_Server\WSServer.exe"
-SERVER_EXE_ARGS=""
+SERVER_EXE_ARGS="Level01_Main,-server %*,-log,-UTF8Output,-MULTIHOME=0.0.0.0,-EchoPort=18888,-forcepassthrough"
 SERVER_CONFIG_PATHS="C:\Games\Servers\Soulmask_Server\Engine.ini"
 ```
 
@@ -67,6 +67,8 @@ Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts` and 
   - _Note: While the server will start, we're currently unable to proxy the logs from the server, thus rendering several parts of the application unusable._
 - [Enshrouded (`enshrouded`)](https://enshrouded.com/)
 - [Soulmask (`soulmask`)](https://mask.qoolandgames.com/)
+  - _Note: While the server will start, we're currently unable to proxy the logs from the server, thus rendering several parts of the application unusable._
+  - _Note: There are currently issues with the config file, so you may need to pass additional arguments to `SERVER_EXE_PATH`: +`-SteamServerName=<YOUR_SERVER_NAME>,-PSW=<your-password>,-Port=<your-port>,-QueryPort=<your-query-port>,adminpsw=<your-admin-password>`_
 - [V-rising (`v-rising`)](https://playvrising.com/)
 
 ## Getting Started

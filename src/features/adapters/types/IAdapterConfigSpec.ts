@@ -1,12 +1,12 @@
-export interface IAdapterConfigSpecJson {
-  type: "json";
+export interface IAdapterConfigSpecIni {
+  type: "ini";
   indent: string;
   newline: string;
   newlineEof: boolean;
 }
 
-export interface IAdapterConfigSpecIni {
-  type: "ini";
+export interface IAdapterConfigSpecJson {
+  type: "json";
   indent: string;
   newline: string;
   newlineEof: boolean;
@@ -20,6 +20,6 @@ export interface IAdapterConfigSpecXml {
 }
 
 export type IAdapterConfigSpec =
-  | IAdapterConfigSpecJson
   | IAdapterConfigSpecIni
+  | IAdapterConfigSpecJson
   | IAdapterConfigSpecXml;

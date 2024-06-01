@@ -1,5 +1,13 @@
+import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { ISoulmaskServerStateInfo } from "@/features/adapters/soulmask/types/ISoulmaskServerStateInfo";
 import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
+
+const SOULMASK_RE = {
+  serverSaved: /logSS:\s+UStoreSubsystem::OnDatabaseBackup/i,
+  playerJoined:
+    /logStoreGamemode:\s+player ready\.\s+Addr:[^,]+,\s+Netuid:\s?(\w+),\s+Name:\s*(.+)/i,
+  playerLeft: /logStoreGamemode:\s+Display:\s+player leave world\.\s+(\w+)/,
+};
 
 export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
   "soulmask",
@@ -27,7 +35,53 @@ export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
       (data, _current) => ({
         serverName: data.match(/^NAME:\s+(.+)/i)?.[1],
       }),
-      // TODO Add more info getters when getting it up and running to check format
+      (data, current) => ({
+        lastSaved: SOULMASK_RE.serverSaved.test(data)
+          ? formatDatetime(new Date(), true)
+          : undefined,
+        savedCount: SOULMASK_RE.serverSaved.test(data)
+          ? (current?.savedCount ?? 0) + 1
+          : undefined,
+      }),
+      (data, _current) => {
+        if (SOULMASK_RE.playerJoined.test(data)) {
+          return {
+            lastLoggedOn: formatDatetime(new Date(), true),
+          };
+        }
+
+        if (SOULMASK_RE.playerLeft.test(data)) {
+          return {
+            lastLoggedOff: formatDatetime(new Date(), true),
+          };
+        }
+
+        return {};
+      },
+      (data, current) => {
+        const players = new Set(
+          current?.players ? current.players.split(",") : [],
+        );
+
+        const joinedPlayerMatch = data.match(SOULMASK_RE.playerJoined);
+        if (joinedPlayerMatch) {
+          players.add(`${joinedPlayerMatch[1]}:${joinedPlayerMatch[2]}`);
+        }
+
+        const leftPlayer = data.match(SOULMASK_RE.playerLeft)?.[1];
+        if (leftPlayer) {
+          players.forEach((player) => {
+            if (player.startsWith(leftPlayer)) {
+              players.delete(player);
+            }
+          });
+        }
+
+        return {
+          players: players ? Array.from(players).join(", ") : undefined,
+          playerCount: players.size,
+        };
+      },
     ],
   },
 };

@@ -1,4 +1,9 @@
 export interface ISoulmaskServerStateInfo {
   serverName?: string;
-  // TODO Add more info when getting it up and running to check format
+  lastSaved?: string;
+  savedCount?: number;
+  playerCount?: number;
+  lastLoggedOn?: string;
+  lastLoggedOff?: string;
+  players?: string;
 }

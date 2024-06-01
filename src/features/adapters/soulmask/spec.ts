@@ -5,7 +5,7 @@ import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
 const SOULMASK_RE = {
   serverSaved: /logSS:\s+UStoreSubsystem::OnDatabaseBackup/i,
   playerJoined:
-    /logStoreGamemode:\s+player ready\.\s+Addr:[^,]+,\s+Netuid:\s?(\w+),\s+Name:\s*(.+)/i,
+    /logStoreGamemode:\s+player ready\.\s+Addr:\s*[^,]+,\s+Netuid:\s?(\w+),\s+Name:\s*(.+)/i,
   playerLeft: /logStoreGamemode:\s+Display:\s+player leave world\.\s+(\w+)/,
 };
 
@@ -59,9 +59,7 @@ export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
         return {};
       },
       (data, current) => {
-        const players = new Set(
-          current?.players ? current.players.split(",") : [],
-        );
+        const players = new Set(current?.players?.split(",") ?? []);
 
         const joinedPlayerMatch = data.match(SOULMASK_RE.playerJoined);
         if (joinedPlayerMatch) {

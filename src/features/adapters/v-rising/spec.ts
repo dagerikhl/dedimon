@@ -104,7 +104,7 @@ export const V_RISING_ADAPTER_SPEC: IAdapterSpec<
         }
 
         return {
-          characters: Array.from(chars).join(", ") || undefined,
+          characters: Array.from(chars).join(", "),
         };
       },
     ],

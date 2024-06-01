@@ -59,7 +59,9 @@ export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
         return {};
       },
       (data, current) => {
-        const players = new Set(current?.players?.split(", ") ?? []);
+        const players = new Set(
+          current?.players ? current.players.split(", ") : [],
+        );
 
         const joinedPlayerMatch = data.match(SOULMASK_RE.playerJoined);
         if (joinedPlayerMatch) {
@@ -76,7 +78,7 @@ export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
         }
 
         return {
-          players: Array.from(players).join(", ") || undefined,
+          players: Array.from(players).join(", "),
           playerCount: players.size,
         };
       },

@@ -1,10 +1,6 @@
 import { ISoulmaskServerStateInfo } from "@/features/adapters/soulmask/types/ISoulmaskServerStateInfo";
 import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
 
-const SOULMASK_RE = {
-  // TODO Fill this if necessary if the bug with no logs proxied is fixed
-};
-
 export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
   "soulmask",
   ISoulmaskServerStateInfo
@@ -25,11 +21,13 @@ export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
       newlineEof: false,
     },
   },
-  // TODO node-pty is currently unable to proxy logs for this game, thus being unable to parse info
   stateInfoSpec: {
-    // FIXME
-    checkStarted: (_data, _current) => true,
-    // FIXME
-    infoGetters: [],
+    checkStarted: (data, _current) => /^CREATE_TIME:\s+\d+/i.test(data),
+    infoGetters: [
+      (data, _current) => ({
+        serverName: data.match(/^NAME:\s+(.+)/i)?.[1],
+      }),
+      // TODO Add more info getters when getting it up and running to check format
+    ],
   },
 };

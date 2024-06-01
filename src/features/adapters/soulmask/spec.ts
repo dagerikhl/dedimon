@@ -76,7 +76,8 @@ export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
         }
 
         return {
-          players: players ? Array.from(players).join(", ") : undefined,
+          players:
+            players.size > 0 ? Array.from(players).join(", ") : undefined,
           playerCount: players.size,
         };
       },

@@ -86,7 +86,7 @@ export const V_RISING_ADAPTER_SPEC: IAdapterSpec<
       },
       (data, current) => {
         const chars = new Set(
-          current?.characters ? current.characters.split(",") : [],
+          current?.characters ? current.characters.split(", ") : [],
         );
 
         const joinedPlayerMatch = data.match(V_RISING_RE.playerJoined);
@@ -104,7 +104,7 @@ export const V_RISING_ADAPTER_SPEC: IAdapterSpec<
         }
 
         return {
-          characters: chars ? Array.from(chars).join(", ") : undefined,
+          characters: chars.size > 0 ? Array.from(chars).join(", ") : undefined,
         };
       },
     ],

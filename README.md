@@ -21,6 +21,7 @@ Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts` and 
   - _Note: There seems to be some issues with writing the logfile, so this might not work either. The server should still start, but you won't get much output, making major parts of the application unusable._
 - [Enshrouded (`enshrouded`)](https://enshrouded.com/)
 - [Soulmask (`soulmask`)](https://mask.qoolandgames.com/)
+  - _Prerequisite: This server requires Steam to be installed on your system to run (specifically it requires som DLL files that is shipped with Steam)._
   - _Note: We're currently unable to proxy the logs from the server terminal, so specifying a path to a log file in `SERVER_LOG_PATH` is required for the server to fully work._
   - _Note: There are currently issues with the config file, so you may need to pass additional arguments to `SERVER_EXE_ARGS`: `-SteamServerName=<YOUR_SERVER_NAME>,-PSW=<your-password>,-Port=<your-port>,-QueryPort=<your-query-port>,adminpsw=<your-admin-password>`._
 - [V-rising (`v-rising`)](https://playvrising.com/)

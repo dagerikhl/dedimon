@@ -9,6 +9,7 @@ declare global {
       SERVER_EXE_PATH?: string;
       SERVER_EXE_ARGS?: string;
       SERVER_CONFIG_PATHS?: string;
+      SERVER_LOG_PATH?: string;
     }
   }
 }

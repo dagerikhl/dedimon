@@ -33,12 +33,14 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hooks-sse": "2.1.0",
-    "steamcmd-interface": "4.0.2"
+    "steamcmd-interface": "4.0.2",
+    "tail": "2.2.6"
   },
   "devDependencies": {
     "@types/node": "20.11.30",
     "@types/react": "18.2.69",
     "@types/react-dom": "18.2.22",
+    "@types/tail": "2.2.3",
     "eslint": "8.57.0",
     "eslint-config-next": "14.1.4",
     "eslint-config-prettier": "9.1.0",

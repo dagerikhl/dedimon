@@ -3,14 +3,18 @@ import { IAdapterType } from "@/features/adapters/types/IAdapterType";
 import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
 import { IApiServerState } from "@/features/state/types/IApiServerState";
 import { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
+import { existsSync } from "node:fs";
 import * as pty from "node-pty";
 import path from "path";
 import { IProgress, SteamCmd } from "steamcmd-interface";
+import { Tail } from "tail";
 
 type ISetter<S> = S | ((prevState: S) => S);
 
 type ISubscribeCallback = (state: IApiServerState) => void;
 type IUnsubscribeCallback = () => void;
+
+type ILogLineTransformer = (data: string) => string;
 
 const mergeLog = (log: string[] | undefined, newLogEntry: string): string[] => [
   ...(log ?? []),
@@ -60,8 +64,10 @@ export class ServerRunner {
   private readonly _serverPath: string;
   private readonly _serverExePath: string;
   private readonly _serverExeArgs: string[] | undefined;
+  private readonly _serverLogPath: string | undefined;
 
   private _serverProcess: pty.IPty | undefined;
+  private _logTailProcess: Tail | undefined;
 
   private readonly _subscribers: Map<number, ISubscribeCallback>;
 
@@ -73,12 +79,14 @@ export class ServerRunner {
     serverPath: string,
     serverExePath: string,
     serverExeArgs: string | undefined,
+    serverLogPath: string | undefined,
   ) {
     this._adapter = adapter;
     this._appId = appId;
     this._serverPath = path.resolve(serverPath);
     this._serverExePath = path.resolve(serverExePath);
     this._serverExeArgs = serverExeArgs ? serverExeArgs.split(",") : undefined;
+    this._serverLogPath = serverLogPath;
 
     this._subscribers = new Map();
   }
@@ -107,6 +115,7 @@ export class ServerRunner {
         process.env.SERVER_PATH,
         process.env.SERVER_EXE_PATH,
         process.env.SERVER_EXE_ARGS,
+        process.env.SERVER_LOG_PATH,
       );
     }
 
@@ -128,47 +137,53 @@ export class ServerRunner {
       resolve();
     };
 
-  private createLogHandler = (resolve: VoidFunction) => (data: string) => {
-    const normalizedData = normalizeLogLine(data);
+  private createLogHandler =
+    (resolve: VoidFunction, transformer?: ILogLineTransformer) =>
+    (data: string) => {
+      const normalizedData = normalizeLogLine(data);
 
-    if (!normalizedData) {
-      return;
-    }
+      if (!normalizedData) {
+        return;
+      }
 
-    const adapterSpec = ADAPTERS[this._adapter];
+      const transformedData = transformer
+        ? transformer(normalizedData)
+        : normalizedData;
 
-    let info: Record<string, any> = {};
-    for (const infoGetter of adapterSpec.stateInfoSpec.infoGetters) {
-      info = {
-        ...info,
-        ...infoGetter(normalizedData, this.getState().info),
-      };
-    }
+      const adapterSpec = ADAPTERS[this._adapter];
 
-    const newLogEntry = `${getTimestamp()} ${normalizedData}`;
+      let info: Record<string, any> = {};
+      for (const infoGetter of adapterSpec.stateInfoSpec.infoGetters) {
+        info = {
+          ...info,
+          ...infoGetter(transformedData, this.getState().info),
+        };
+      }
 
-    if (
-      adapterSpec.stateInfoSpec.checkStarted(
-        normalizedData,
-        this.getState().info,
-      )
-    ) {
-      this.setState((current) => ({
-        status: "running",
-        started: new Date().toISOString(),
-        log: mergeLog(current.log, newLogEntry),
-        info: mergeInfo(current.info, info),
-      }));
+      const newLogEntry = `${getTimestamp()} ${transformedData}`;
 
-      resolve();
-    } else {
-      this.setState((current) => ({
-        ...current,
-        log: mergeLog(current.log, newLogEntry),
-        info: mergeInfo(current.info, info),
-      }));
-    }
-  };
+      if (
+        adapterSpec.stateInfoSpec.checkStarted(
+          transformedData,
+          this.getState().info,
+        )
+      ) {
+        this.setState((current) => ({
+          status: "running",
+          started: new Date().toISOString(),
+          log: mergeLog(current.log, newLogEntry),
+          info: mergeInfo(current.info, info),
+        }));
+
+        resolve();
+      } else {
+        this.setState((current) => ({
+          ...current,
+          log: mergeLog(current.log, newLogEntry),
+          info: mergeInfo(current.info, info),
+        }));
+      }
+    };
 
   public getState = (): IApiServerState => this._state;
 
@@ -221,7 +236,21 @@ export class ServerRunner {
           },
         );
 
-        this._serverProcess.on("data", this.createLogHandler(resolve));
+        if (this._serverLogPath && existsSync(this._serverLogPath)) {
+          this._logTailProcess = new Tail(this._serverLogPath);
+          this._logTailProcess.on(
+            "line",
+            this.createLogHandler(resolve, (data) =>
+              data.replace(
+                /^\[\d{4}\.\d{2}\.\d{2}-\d{2}\.\d{2}\.\d{2}:\d{3}]/,
+                "",
+              ),
+            ),
+          );
+        } else {
+          this._serverProcess.on("data", this.createLogHandler(resolve));
+        }
+
         this._serverProcess.on("exit", this.createDeathHandler(resolve));
       } catch (e) {
         this.setState({ status: "stopped" });
@@ -248,6 +277,11 @@ export class ServerRunner {
       this._serverProcess.on("exit", this.createDeathHandler(resolve));
 
       this._serverProcess.write("\x03");
+
+      if (this._logTailProcess) {
+        this._logTailProcess.unwatch();
+        this._logTailProcess = undefined;
+      }
     });
   };
 

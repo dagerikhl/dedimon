@@ -26,19 +26,19 @@ Examples:
 ```dotenv
 NEXT_PUBLIC_ADAPTER="7-days-to-die"
 APP_ID="251570"
-SERVER_PATH="C:\Games\Steam\steamapps\common\7 Days to Die Dedicated Server"
-SERVER_EXE_PATH="C:\Games\Steam\steamapps\common\7 Days to Die Dedicated Server\7DaysToDieServer.exe"
+SERVER_PATH="C:\Games\Servers\7 Days to Die Dedicated Server"
+SERVER_EXE_PATH="C:\Games\Servers\7 Days to Die Dedicated Server\7DaysToDieServer.exe"
 SERVER_EXE_ARGS="quit,batchmode,nographics,configfile=serverconfig.xml,dedicated"
-SERVER_CONFIG_PATHS="C:\Games\Steam\steamapps\common\7 Days to Die Dedicated Server\serverconfig.xml"
+SERVER_CONFIG_PATHS="C:\Games\Servers\7 Days to Die Dedicated Server\serverconfig.xml"
 ```
 
 ```dotenv
 NEXT_PUBLIC_ADAPTER="enshrouded"
 APP_ID="2278520"
-SERVER_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer"
-SERVER_EXE_PATH="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded_server.exe"
+SERVER_PATH="C:\Games\Servers\EnshroudedServer"
+SERVER_EXE_PATH="C:\Games\Servers\EnshroudedServer\enshrouded_server.exe"
 SERVER_EXE_ARGS=""
-SERVER_CONFIG_PATHS="C:\Games\Steam\steamapps\common\EnshroudedServer\enshrouded_server.json"
+SERVER_CONFIG_PATHS="C:\Games\Servers\EnshroudedServer\enshrouded_server.json"
 ```
 
 ```dotenv
@@ -53,10 +53,10 @@ SERVER_CONFIG_PATHS="C:\Games\Servers\Soulmask_Server\Engine.ini"
 ```dotenv
 NEXT_PUBLIC_ADAPTER="v-rising"
 APP_ID="1829350"
-SERVER_PATH="C:\Games\Steam\steamapps\common\VRisingDedicatedServer"
-SERVER_EXE_PATH="C:\Games\Steam\steamapps\common\VRisingDedicatedServer\VRisingServer.exe"
+SERVER_PATH="C:\Games\Servers\VRisingDedicatedServer"
+SERVER_EXE_PATH="C:\Games\Servers\VRisingDedicatedServer\VRisingServer.exe"
 SERVER_EXE_ARGS=""
-SERVER_CONFIG_PATHS="C:\Games\Steam\steamapps\common\VRisingDedicatedServer\ServerHostSettings.json,C:\Games\Steam\steamapps\common\VRisingDedicatedServer\ServerGameSettings.json"
+SERVER_CONFIG_PATHS="C:\Games\Servers\VRisingDedicatedServer\ServerHostSettings.json,C:\Games\Servers\VRisingDedicatedServer\ServerGameSettings.json"
 ```
 
 ### Adapters

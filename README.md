@@ -16,6 +16,7 @@ This project is made to run on a Windows machine.
 
 Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts` and `src/features/adapters/ADAPTERS.ts`):
 
+- [Aska (`aska`)](https://playaska.com/)
 - [7 Days to Die (`7-days-to-die`)](https://7daystodie.com/)
   - _Note: We're currently unable to proxy the logs from the server terminal, so specifying a path to a log file in `SERVER_LOG_PATH` is required for the server to fully work._
   - _Note: There seems to be some issues with writing the logfile, so this might not work either. The server should still start, but you won't get much output, making major parts of the application unusable._
@@ -41,6 +42,18 @@ SERVER_LOG_PATH="<path to a log file for your server, will be used if specified,
 ```
 
 #### Examples
+
+##### Aska
+
+```dotenv
+NEXT_PUBLIC_ADAPTER="aska"
+APP_ID="3246670"
+SERVER_PATH="C:\Games\Servers\Aska_Server"
+SERVER_EXE_PATH="C:\Games\Servers\Aska_Server\AskaServer.exe"
+SERVER_EXE_ARGS="-propertiesPath \"dedimon-properties.txt\""
+SERVER_CONFIG_PATHS="C:\Games\Servers\Aska_Server\dedimon-properties.txt"
+SERVER_LOG_PATH=""
+```
 
 ##### 7 Days to Die
 

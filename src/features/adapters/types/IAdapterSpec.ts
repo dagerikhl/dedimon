@@ -13,6 +13,7 @@ export interface IAdapterSpec<
     height: number;
     width: number;
     omitTextFromLogoBanner?: boolean;
+    inverted?: boolean;
   };
   configSpecs: Record<string, IAdapterConfigSpec>;
   stateInfoSpec: IAdapterStateInfoSpec<Info>;

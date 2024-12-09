@@ -9,6 +9,7 @@ export const ASKA_ADAPTER_SPEC: IAdapterSpec<"aska", IAskaServerStateInfo> = {
     height: 715,
     width: 1440,
     omitTextFromLogoBanner: true,
+    inverted: true,
   },
   configSpecs: {
     "dedimon-properties.txt": {

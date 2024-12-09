@@ -16,6 +16,7 @@ export const AdapterBanner = ({ className }: IAdapterBannerProps) => {
     <div className={cz(className, styles.container)}>
       {ADAPTER.logo && (
         <Image
+          className={cz({ [styles.inverted]: ADAPTER.logo.inverted })}
           src={ADAPTER.logo.src}
           alt={`${label} logo`}
           height={ADAPTER.logo.height}

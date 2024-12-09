@@ -49,9 +49,9 @@ SERVER_LOG_PATH="<path to a log file for your server, will be used if specified,
 NEXT_PUBLIC_ADAPTER="aska"
 APP_ID="3246670"
 SERVER_PATH="C:\Games\Servers\Aska_Server"
-SERVER_EXE_PATH="C:\Games\Servers\Aska_Server\AskaServer.exe"
-SERVER_EXE_ARGS="-propertiesPath \"dedimon-properties.txt\""
-SERVER_CONFIG_PATHS="C:\Games\Servers\Aska_Server\dedimon-properties.txt"
+SERVER_EXE_PATH="C:\Games\Servers\Aska_Server\AskaServer.bat"
+SERVER_EXE_ARGS=""
+SERVER_CONFIG_PATHS="C:\Games\Servers\Aska_Server\server properties.txt"
 SERVER_LOG_PATH=""
 ```
 

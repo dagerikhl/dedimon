@@ -278,6 +278,14 @@ export class ServerRunner {
 
       this._serverProcess.write("\x03");
 
+      setTimeout(() => {
+        if (!this._serverProcess) {
+          return;
+        }
+
+        this._serverProcess.write("\x03");
+      }, 5000);
+
       if (this._logTailProcess) {
         this._logTailProcess.unwatch();
         this._logTailProcess = undefined;

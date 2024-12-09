@@ -1,5 +1,12 @@
+import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { IAskaServerStateInfo } from "@/features/adapters/aska/types/IAskaServerStateInfo";
 import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
+
+const ASKA_RE = {
+  serverSaved: /Saving: Flushing done!/i,
+  playerJoined: /^(.+) connected!/i,
+  playerLeft: /^(.+) disconnected!/i,
+};
 
 export const ASKA_ADAPTER_SPEC: IAdapterSpec<"aska", IAskaServerStateInfo> = {
   id: "aska",
@@ -23,9 +30,51 @@ export const ASKA_ADAPTER_SPEC: IAdapterSpec<"aska", IAskaServerStateInfo> = {
     checkStarted: (data, _current) => /The session is now open!/i.test(data),
     infoGetters: [
       (data, _current) => ({
-        gameVersion: data.match(/Running game version:\s*(.+)$/i)?.[1],
+        gameVersion: data.match(/Running game version:\s*(.+)/i)?.[1],
       }),
-      // TODO Add more matchers and more info
+      (data, current) => ({
+        lastSaved: ASKA_RE.serverSaved.test(data)
+          ? formatDatetime(new Date(), true)
+          : undefined,
+        savedCount: ASKA_RE.serverSaved.test(data)
+          ? (current?.savedCount ?? 0) + 1
+          : undefined,
+      }),
+      (data, _current) => {
+        if (ASKA_RE.playerJoined.test(data)) {
+          return {
+            lastLoggedOn: formatDatetime(new Date(), true),
+          };
+        }
+
+        if (ASKA_RE.playerLeft.test(data)) {
+          return {
+            lastLoggedOff: formatDatetime(new Date(), true),
+          };
+        }
+
+        return {};
+      },
+      (data, current) => {
+        const players = new Set(
+          current?.players ? current.players.split(", ") : [],
+        );
+
+        const joinedPlayerMatch = data.match(ASKA_RE.playerJoined);
+        if (joinedPlayerMatch?.[1]) {
+          players.add(joinedPlayerMatch[1]);
+        }
+
+        const leftPlayer = data.match(ASKA_RE.playerLeft)?.[1];
+        if (leftPlayer) {
+          players.delete(leftPlayer);
+        }
+
+        return {
+          players: Array.from(players).join(", "),
+          playerCount: players.size,
+        };
+      },
     ],
   },
 };

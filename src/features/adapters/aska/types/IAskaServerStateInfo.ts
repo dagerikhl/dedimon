@@ -1,4 +1,9 @@
 export interface IAskaServerStateInfo {
   gameVersion?: string;
-  // TODO Add more matchers and more info
+  lastSaved?: string;
+  savedCount?: number;
+  playerCount?: number;
+  lastLoggedOn?: string;
+  lastLoggedOff?: string;
+  players?: string;
 }

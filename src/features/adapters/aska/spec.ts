@@ -19,10 +19,16 @@ export const ASKA_ADAPTER_SPEC: IAdapterSpec<"aska", IAskaServerStateInfo> = {
     inverted: true,
   },
   configSpecs: {
-    "dedimon-properties.txt": {
-      type: "ini",
+    "server properties.txt": {
+      type: "text",
       indent: "\t",
-      newline: "\n",
+      newline: "\r\n",
+      newlineEof: true,
+    },
+    "server properties.backup.txt": {
+      type: "text",
+      indent: "\t",
+      newline: "\r\n",
       newlineEof: true,
     },
   },

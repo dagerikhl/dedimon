@@ -9,6 +9,8 @@ export const parseConfig = <T>(
       return configStr as T;
     case "json":
       return JSON.parse(configStr);
+    case "text":
+      return configStr as T;
     case "xml":
       return configStr as T;
   }
@@ -25,6 +27,9 @@ export const stringifyConfig = <T>(
       break;
     case "json":
       parsedConfig = JSON.stringify(config, null, configSpec.indent);
+      break;
+    case "text":
+      parsedConfig = config as string;
       break;
     case "xml":
       parsedConfig = config as string;

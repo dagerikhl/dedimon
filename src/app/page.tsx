@@ -2,6 +2,7 @@ import { Card } from "@/common/components/layout/Card";
 import { Configs } from "@/features/config/components/Configs";
 import { Info } from "@/features/info/components/Info";
 import { Log } from "@/features/log/components/Log";
+import { PlayerLog } from "@/features/player-log/components/PlayerLog";
 import { State } from "@/features/state/components/State";
 import { UptimeGfx } from "@/modules/uptime-gfx/components/UptimeGfx";
 import styles from "./page.module.scss";
@@ -22,6 +23,10 @@ export default function Home() {
 
       <Card className={styles.info} heading="Info">
         <Info />
+      </Card>
+
+      <Card className={styles["player-log"]} heading="Player Log">
+        <PlayerLog />
       </Card>
 
       <Card className={styles.config} heading="Config">

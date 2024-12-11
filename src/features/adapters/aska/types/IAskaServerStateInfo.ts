@@ -1,3 +1,5 @@
+import { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
+
 export interface IAskaServerStateInfo {
   gameVersion?: string;
   lastSaved?: string;
@@ -6,4 +8,5 @@ export interface IAskaServerStateInfo {
   lastLoggedOn?: string;
   lastLoggedOff?: string;
   players?: string;
+  playerLog?: IPlayerLog;
 }

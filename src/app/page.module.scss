@@ -5,6 +5,7 @@
     "status"
     "config"
     "info"
+    "player-log"
     "log";
   grid-template-columns: 1fr;
   grid-template-rows: auto minmax(300px, auto) auto auto;
@@ -23,9 +24,9 @@
       "info config log"
       "info config log"
       "info config log"
-      "info config log"
-      "info config log"
-      "info config log";
+      "player-log player-log log"
+      "player-log player-log log"
+      "player-log player-log log";
     grid-template-columns: 1fr 1fr 2fr;
     grid-template-rows: repeat(10, 1fr);
     overflow-y: unset;
@@ -42,6 +43,10 @@
 
 .info {
   grid-area: info;
+}
+
+.player-log {
+  grid-area: player-log;
 }
 
 .config {

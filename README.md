@@ -51,7 +51,8 @@ APP_ID="3246670"
 SERVER_PATH="C:\Games\Servers\Aska_Server"
 SERVER_EXE_PATH="C:\Games\Servers\Aska_Server\AskaServer.bat"
 SERVER_EXE_ARGS=""
-SERVER_CONFIG_PATHS="C:\Games\Servers\Aska_Server\server properties.txt"
+# You should edit the normal server properties.txt with your configuration, then make a backup copy because it may be overwritten by the server when updated
+SERVER_CONFIG_PATHS="C:\Games\Servers\Aska_Server\server properties.txt,C:\Games\Servers\Aska_Server\server properties.backup.txt"
 SERVER_LOG_PATH=""
 ```
 

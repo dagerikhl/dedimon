@@ -21,6 +21,7 @@ Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts` and 
   - _Note: We're currently unable to proxy the logs from the server terminal, so specifying a path to a log file in `SERVER_LOG_PATH` is required for the server to fully work._
   - _Note: There seems to be some issues with writing the logfile, so this might not work either. The server should still start, but you won't get much output, making major parts of the application unusable._
 - [Enshrouded (`enshrouded`)](https://enshrouded.com/)
+- [Return to Moria](https://www.returntomoria.com/)
 - [Soulmask (`soulmask`)](https://mask.qoolandgames.com/)
   - _Prerequisite: This server requires Steam to be installed on your system to run (specifically it requires som DLL files that is shipped with Steam)._
   - _Note: We're currently unable to proxy the logs from the server terminal, so specifying a path to a log file in `SERVER_LOG_PATH` is required for the server to fully work._
@@ -78,6 +79,18 @@ SERVER_PATH="C:\Games\Servers\EnshroudedServer"
 SERVER_EXE_PATH="C:\Games\Servers\EnshroudedServer\enshrouded_server.exe"
 SERVER_EXE_ARGS=""
 SERVER_CONFIG_PATHS="C:\Games\Servers\EnshroudedServer\enshrouded_server.json"
+SERVER_LOG_PATH=""
+```
+
+##### Return to Moria
+
+```dotenv
+NEXT_PUBLIC_ADAPTER="return-to-moria"
+APP_ID="3349480"
+SERVER_PATH="C:\Games\Servers\RtM_Server"
+SERVER_EXE_PATH="C:\Games\Servers\RtM_Server\MoriaServer.exe"
+SERVER_EXE_ARGS=""
+SERVER_CONFIG_PATHS="C:\Games\Servers\RtM_Server\MoriaServerConfig.ini,C:\Games\Servers\RtM_Server\MoriaServerRules.txt"
 SERVER_LOG_PATH=""
 ```
 

@@ -61,10 +61,10 @@ SERVER_LOG_PATH=""
 
 ```dotenv
 NEXT_PUBLIC_ADAPTER="7-days-to-die"
-APP_ID="251570"
+APP_ID="294420"
 SERVER_PATH="C:\Games\Servers\7 Days to Die Dedicated Server"
 SERVER_EXE_PATH="C:\Games\Servers\7 Days to Die Dedicated Server\7DaysToDieServer.exe"
-SERVER_EXE_ARGS="-logfile 7DaysToDieServer_Data\log.txt,quit,batchmode,nographics,configfile=serverconfig.xml,dedicated"
+SERVER_EXE_ARGS="-logfile \"7DaysToDieServer_Data\log.txt\",-quit,-batchmode,-nographics,-configfile=serverconfig.xml,-dedicated"
 SERVER_CONFIG_PATHS="C:\Games\Servers\7 Days to Die Dedicated Server\serverconfig.xml"
 # This game's proxying of terminal log is broken, so it requires a log file specified here
 SERVER_LOG_PATH="C:\Games\Servers\7 Days to Die Dedicated Server\log.txt"

@@ -226,6 +226,12 @@ export class ServerRunner {
       this.setState({ status: "starting" });
 
       try {
+        LOGGER.info(
+          "Starting server:",
+          this._serverExePath,
+          this._serverExeArgs,
+        );
+
         this._serverProcess = pty.spawn(
           this._serverExePath,
           this._serverExeArgs ?? [],
@@ -237,6 +243,11 @@ export class ServerRunner {
         );
 
         if (this._serverLogPath && existsSync(this._serverLogPath)) {
+          LOGGER.info(
+            "Server has SERVER_LOG_PATH configures, will read output from logs instead of terminal. Path:",
+            this._serverLogPath,
+          );
+
           this._logTailProcess = new Tail(this._serverLogPath);
           this._logTailProcess.on(
             "line",

@@ -9,19 +9,19 @@ This project is made to run on a Windows machine.
 - [Node.js v18+](https://nodejs.org).
 - [Yarn v1](https://classic.yarnpkg.com).
 - [Windows SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/) (only the "Desktop C++ Apps" components need to be installed).
-- (Possibly [node-gyp](https://github.com/nodejs/node-gyp), it may be installed already on some computers).
+- (Possibly [node-gyp](https://github.com/nodejs/node-gyp), it may already be installed already on some computers).
 - Correctly setup environment variables in `.env.local` in the root of this project. See below for format.
 
 ### Adapters
 
 Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts` and `src/features/adapters/ADAPTERS.ts`):
 
-- [Aska (`aska`)](https://playaska.com/)
 - [7 Days to Die (`7-days-to-die`)](https://7daystodie.com/)
   - _Note: We're currently unable to proxy the logs from the server terminal, so specifying a path to a log file in `SERVER_LOG_PATH` is required for the server to fully work._
-  - _Note: There seems to be some issues with writing the logfile, so this might not work either. The server should still start, but you won't get much output, making major parts of the application unusable._
+  - _Note: There seems to be some issues with writing the logfile, so currently this doesn't work either (working on issue). The server should still start, but you won't get much output, making major parts of the application unusable. See the 7 Days terminal for output and configure the 7 Days web UI for logs and interaction._
+- [Aska (`aska`)](https://playaska.com/)
 - [Enshrouded (`enshrouded`)](https://enshrouded.com/)
-- [Return to Moria](https://www.returntomoria.com/)
+- [Return to Moria (`rtm`)](https://www.returntomoria.com/)
 - [Soulmask (`soulmask`)](https://mask.qoolandgames.com/)
   - _Prerequisite: This server requires Steam to be installed on your system to run (specifically it requires som DLL files that is shipped with Steam)._
   - _Note: We're currently unable to proxy the logs from the server terminal, so specifying a path to a log file in `SERVER_LOG_PATH` is required for the server to fully work._
@@ -44,19 +44,6 @@ SERVER_LOG_PATH="<path to a log file for your server, will be used if specified,
 
 #### Examples
 
-##### Aska
-
-```dotenv
-NEXT_PUBLIC_ADAPTER="aska"
-APP_ID="3246670"
-SERVER_PATH="C:\Games\Servers\Aska_Server"
-SERVER_EXE_PATH="C:\Games\Servers\Aska_Server\AskaServer.bat"
-SERVER_EXE_ARGS=""
-# You should edit the normal server properties.txt with your configuration, then make a backup copy because it may be overwritten by the server when updated
-SERVER_CONFIG_PATHS="C:\Games\Servers\Aska_Server\server properties.txt,C:\Games\Servers\Aska_Server\server properties.backup.txt"
-SERVER_LOG_PATH=""
-```
-
 ##### 7 Days to Die
 
 ```dotenv
@@ -66,8 +53,21 @@ SERVER_PATH="C:\Games\Servers\7 Days to Die Dedicated Server"
 SERVER_EXE_PATH="C:\Games\Servers\7 Days to Die Dedicated Server\7DaysToDieServer.exe"
 SERVER_EXE_ARGS="-logfile \"7DaysToDieServer_Data\log.txt\",-quit,-batchmode,-nographics,-configfile=serverconfig.xml,-dedicated"
 SERVER_CONFIG_PATHS="C:\Games\Servers\7 Days to Die Dedicated Server\serverconfig.xml"
-# This game's proxying of terminal log is broken, so it requires a log file specified here
+# This game's proxying of terminal log is broken, so it requires a log file specified here (doesn't currently work, working on issue)
 SERVER_LOG_PATH="C:\Games\Servers\7 Days to Die Dedicated Server\log.txt"
+```
+
+##### Aska
+
+```dotenv
+NEXT_PUBLIC_ADAPTER="aska"
+APP_ID="3246670"
+SERVER_PATH="C:\Games\Servers\Aska_Server"
+SERVER_EXE_PATH="C:\Games\Servers\Aska_Server\AskaServer.bat"
+SERVER_EXE_ARGS=""
+# You should edit the normal "server properties.txt" with your configuration, then make a backup copy because it may be overwritten by the server when updated
+SERVER_CONFIG_PATHS="C:\Games\Servers\Aska_Server\server properties.txt,C:\Games\Servers\Aska_Server\server properties.backup.txt"
+SERVER_LOG_PATH=""
 ```
 
 ##### Enshrouded

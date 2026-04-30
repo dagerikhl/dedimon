@@ -1,0 +1,22 @@
+diff --git a/node_modules/steamcmd-interface/dist/steam-cmd.js b/node_modules/steamcmd-interface/dist/steam-cmd.js
+index 44f2bbb..0eec373 100644
+--- a/node_modules/steamcmd-interface/dist/steam-cmd.js
++++ b/node_modules/steamcmd-interface/dist/steam-cmd.js
+@@ -838,7 +838,7 @@ class SteamCmd {
+     language && appUpdateCommand.push(`-language ${language}`);
+     betaName && appUpdateCommand.push(`-beta ${betaName}`);
+     betaPassword && appUpdateCommand.push(`-betapassword ${betaPassword}`);
+-    const commands = [`force_install_dir "${this.#installDir}"`, appUpdateCommand.join(' ')];
++    const commands = [`force_install_dir "${this.#installDir}"`, `login "${this.#username}"`, appUpdateCommand.join(' ')];
+     if (platformBitness === 32 || platformBitness === 64) {
+       commands.unshift('@sSteamCmdForcePlatformBitness ' + platformBitness);
+     }
+@@ -852,7 +852,7 @@ class SteamCmd {
+      * @type {RegExp}
+      */
+     const progressRegex = /Update state \((0x\d+)\) ([^,]+), progress: (\d+.\d+) \((\d+) \/ (\d+)\)/;
+-    for await (const line of this.run(commands)) {
++    for await (const line of this.run(commands, { noAutoLogin: true })) {
+       // Test the current line of output
+       const result = progressRegex.exec(line);
+ 

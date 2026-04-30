@@ -1,7 +1,7 @@
-import { Button, IButtonProps } from "@/common/components/buttons/Button";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
+import { Button, type IButtonProps } from "@/common/components/buttons/Button";
 
 export interface ICopyButtonProps extends IButtonProps {
   children?: ReactNode;

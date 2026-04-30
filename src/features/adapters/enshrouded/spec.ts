@@ -1,7 +1,7 @@
 import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { toNumberIfDefined } from "@/common/utils/general/toNumberIfDefined";
-import { IEnshroudedServerStateInfo } from "@/features/adapters/enshrouded/types/IEnshroudedServerStateInfo";
-import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
+import type { IEnshroudedServerStateInfo } from "@/features/adapters/enshrouded/types/IEnshroudedServerStateInfo";
+import type { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
 
 const ENSHROUDED_RE = {
   serverSaved: /\[server] Saved/i,

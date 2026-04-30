@@ -1,4 +1,3 @@
-import { IServerStatus } from "@/modules/server-status/types/IServerStatus";
 import {
   faBan,
   faCircleQuestion,
@@ -6,7 +5,8 @@ import {
   faSpinner,
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
+import type { FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
+import type { IServerStatus } from "@/modules/server-status/types/IServerStatus";
 
 export const formatServerStatus = (
   status: IServerStatus | undefined,

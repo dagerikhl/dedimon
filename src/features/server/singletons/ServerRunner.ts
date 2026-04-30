@@ -1,13 +1,13 @@
-import { ADAPTERS } from "@/features/adapters/ADAPTERS";
-import { IAdapterType } from "@/features/adapters/types/IAdapterType";
-import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
-import { IApiServerState } from "@/features/state/types/IApiServerState";
-import { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
 import { existsSync } from "node:fs";
+import path from "node:path";
 import * as pty from "node-pty";
-import path from "path";
-import { IProgress, SteamCmd } from "steamcmd-interface";
+import { type IProgress, SteamCmd } from "steamcmd-interface";
 import { Tail } from "tail";
+import { ADAPTERS } from "@/features/adapters/ADAPTERS";
+import type { IAdapterType } from "@/features/adapters/types/IAdapterType";
+import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
+import type { IApiServerState } from "@/features/state/types/IApiServerState";
+import type { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
 
 type ISetter<S> = S | ((prevState: S) => S);
 

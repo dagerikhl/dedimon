@@ -1,4 +1,4 @@
-import { IPlayerLogEvent } from "@/features/player-log/types/IPlayerLogEvent";
+import type { IPlayerLogEvent } from "@/features/player-log/types/IPlayerLogEvent";
 
 export interface IPlayerLogEntry {
   id: string;

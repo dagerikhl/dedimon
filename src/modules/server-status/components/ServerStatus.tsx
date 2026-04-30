@@ -1,12 +1,12 @@
-import { IServerStatus } from "@/modules/server-status/types/IServerStatus";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import cz from "classnames";
+import type { IServerStatus } from "@/modules/server-status/types/IServerStatus";
 import {
   formatServerStatus,
   getServerStatusColor,
   getServerStatusIconProps,
 } from "@/modules/server-status/utils/formatting";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import cz from "classnames";
-import styles from "./ServerStatus.module.scss";
+import styles from "./ServerStatus.module.css";
 
 export interface IServerStatusProps {
   className?: string;

@@ -1,4 +1,4 @@
-import styles from "./UptimeMark.module.scss";
+import styles from "./UptimeMark.module.css";
 
 export interface IUptimeMarkProps {
   x: string;

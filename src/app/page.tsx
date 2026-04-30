@@ -5,7 +5,7 @@ import { Log } from "@/features/log/components/Log";
 import { PlayerLog } from "@/features/player-log/components/PlayerLog";
 import { State } from "@/features/state/components/State";
 import { UptimeGfx } from "@/modules/uptime-gfx/components/UptimeGfx";
-import styles from "./page.module.scss";
+import styles from "./page.module.css";
 
 export default function Home() {
   return (

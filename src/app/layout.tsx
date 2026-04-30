@@ -1,12 +1,12 @@
-import { PageHeader } from "@/common/components/page/PageHeader";
-import { SseServerStateProvider } from "@/features/api/state/providers/SseServerStateProvider";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
 import { Fira_Sans as Font } from "next/font/google";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
+import { PageHeader } from "@/common/components/page/PageHeader";
+import { SseServerStateProvider } from "@/features/api/state/providers/SseServerStateProvider";
 import "normalize.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import "./globals.scss";
+import "./globals.css";
 
 config.autoAddCss = false;
 

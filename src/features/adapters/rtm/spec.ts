@@ -1,11 +1,11 @@
 import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { LOGO } from "@/features/adapters/rtm/constants/LOGO";
-import { IRtmServerStateInfo } from "@/features/adapters/rtm/types/IRtmServerStateInfo";
-import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
-import { IPlayer } from "@/features/player-log/types/IPlayer";
-import { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
-import { IPlayerLogEntry } from "@/features/player-log/types/IPlayerLogEntry";
-import { IPlayerLogEvent } from "@/features/player-log/types/IPlayerLogEvent";
+import type { IRtmServerStateInfo } from "@/features/adapters/rtm/types/IRtmServerStateInfo";
+import type { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
+import type { IPlayer } from "@/features/player-log/types/IPlayer";
+import type { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
+import type { IPlayerLogEntry } from "@/features/player-log/types/IPlayerLogEntry";
+import type { IPlayerLogEvent } from "@/features/player-log/types/IPlayerLogEvent";
 
 const RTM_RE = {
   serverSaved: /Saving: Flushing done!/i,

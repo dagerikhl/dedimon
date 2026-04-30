@@ -1,6 +1,6 @@
 import cz from "classnames";
-import { ReactNode } from "react";
-import styles from "./Positioned.module.scss";
+import type { ReactNode } from "react";
+import styles from "./Positioned.module.css";
 
 export type IPosition =
   | "top"

@@ -1,19 +1,20 @@
-import { getDefinedString } from "@/common/utils/general/getDefinedString";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {
   FontAwesomeIcon,
-  FontAwesomeIconProps,
+  type FontAwesomeIconProps,
 } from "@fortawesome/react-fontawesome";
 import cz from "classnames";
-import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
-import styles from "./Button.module.scss";
+import type { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+import { getDefinedString } from "@/common/utils/general/getDefinedString";
+import styles from "./Button.module.css";
 
 export type IButtonVariant = "default" | "accent" | "success" | "error";
 
-export interface IButtonProps extends DetailedHTMLProps<
-  ButtonHTMLAttributes<HTMLButtonElement>,
-  HTMLButtonElement
-> {
+export interface IButtonProps
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   variant?: IButtonVariant;
   icon?: IconProp;
   iconProps?: FontAwesomeIconProps;

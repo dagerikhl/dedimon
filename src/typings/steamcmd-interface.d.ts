@@ -15,24 +15,24 @@ declare module "steamcmd-interface" {
   }
 
   export class SteamCmd {
-    public static async init(config: IInitConfig): Promise<SteamCmd>;
+    public static init(_config: IInitConfig): Promise<SteamCmd>;
 
-    public async isLoggedIn(): Promise<boolean>;
+    public isLoggedIn(): Promise<boolean>;
 
-    public async login(
-      username: string,
-      password?: string,
-      steamGuardCode?: string,
+    public login(
+      _username: string,
+      _password?: string,
+      _steamGuardCode?: string,
     ): Promise<void>;
 
-    public async run(
-      commands: string[],
-      options?: { noAutoLogin?: boolean },
+    public run(
+      _commands: string[],
+      _options?: { noAutoLogin?: boolean },
     ): AsyncGenerator<void>;
 
-    public async updateApp(
-      appId: number | string,
-      options?: {
+    public updateApp(
+      _appId: number | string,
+      _options?: {
         platformType?: string;
         platformBitness?: string;
         validate?: boolean;

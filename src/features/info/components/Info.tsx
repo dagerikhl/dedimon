@@ -1,10 +1,10 @@
 "use client";
 
+import { Fragment } from "react";
 import { Dl } from "@/common/components/layout/Dl";
 import { Loader } from "@/common/components/layout/Loader";
 import { camelCaseToTitleCase } from "@/common/utils/formatting/text";
 import { useApiServerState } from "@/features/api/state/hooks/useApiServerState";
-import { Fragment } from "react";
 
 const checkIsPrintable = (value: any): boolean =>
   !value ||
@@ -12,7 +12,7 @@ const checkIsPrintable = (value: any): boolean =>
   typeof value === "number" ||
   typeof value === "string";
 
-export const Info = <T extends Record<string, any>>() => {
+export const Info = <_T extends Record<string, any>>() => {
   const state = useApiServerState();
 
   return (

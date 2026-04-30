@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { CopyButton } from "@/common/components/buttons/CopyButton";
 import { DownloadButton } from "@/common/components/buttons/DownloadButton";
 import { Code } from "@/common/components/formatting/Code";
@@ -8,8 +9,7 @@ import { download } from "@/common/utils/files/download";
 import { formatDatetimeSafe } from "@/common/utils/formatting/datetime";
 import { ADAPTERS } from "@/features/adapters/ADAPTERS";
 import { getLogLineParts } from "@/features/log/utils/parsing";
-import { useEffect, useRef, useState } from "react";
-import styles from "./LogView.module.scss";
+import styles from "./LogView.module.css";
 
 const MIN_LINES = 100;
 const ADAPTER = ADAPTERS[process.env.NEXT_PUBLIC_ADAPTER];

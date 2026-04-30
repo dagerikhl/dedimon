@@ -1,7 +1,7 @@
-import { ADAPTERS } from "@/features/adapters/ADAPTERS";
 import cz from "classnames";
 import Image from "next/image";
-import styles from "./AdapterBanner.module.scss";
+import { ADAPTERS } from "@/features/adapters/ADAPTERS";
+import styles from "./AdapterBanner.module.css";
 
 const ADAPTER = ADAPTERS[process.env.NEXT_PUBLIC_ADAPTER];
 

@@ -1,6 +1,6 @@
 import { formatDatetime } from "@/common/utils/formatting/datetime";
-import { ISoulmaskServerStateInfo } from "@/features/adapters/soulmask/types/ISoulmaskServerStateInfo";
-import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
+import type { ISoulmaskServerStateInfo } from "@/features/adapters/soulmask/types/ISoulmaskServerStateInfo";
+import type { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
 
 const SOULMASK_RE = {
   serverSaved: /logSS:\s+UStoreSubsystem::OnDatabaseBackup/i,

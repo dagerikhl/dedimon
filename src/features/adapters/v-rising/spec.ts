@@ -1,6 +1,6 @@
 import { formatDatetime } from "@/common/utils/formatting/datetime";
-import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
-import { IVRisingServerStateInfo } from "@/features/adapters/v-rising/types/IVRisingServerStateInfo";
+import type { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
+import type { IVRisingServerStateInfo } from "@/features/adapters/v-rising/types/IVRisingServerStateInfo";
 
 const V_RISING_RE = {
   serverSaved: /Persistence\w* - Finished Saving/i,

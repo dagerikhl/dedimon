@@ -1,8 +1,8 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cz from "classnames";
-import { ReactNode } from "react";
-import styles from "./Loader.module.scss";
+import type { ReactNode } from "react";
+import styles from "./Loader.module.css";
 
 export interface ILoaderProps {
   isLoading?: boolean;

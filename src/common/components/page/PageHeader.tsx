@@ -1,5 +1,5 @@
 import { AdapterBanner } from "@/common/components/banners/AdapterBanner";
-import styles from "./PageHeader.module.scss";
+import styles from "./PageHeader.module.css";
 
 export const PageHeader = () => (
   <header className={styles.container}>

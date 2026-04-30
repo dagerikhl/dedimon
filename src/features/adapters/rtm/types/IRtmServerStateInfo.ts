@@ -1,4 +1,4 @@
-import { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
+import type { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
 
 export interface IRtmServerStateInfo {
   gameVersion?: string;

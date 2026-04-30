@@ -1,4 +1,4 @@
-import { IAdapterConfigSpec } from "@/features/adapters/types/IAdapterConfigSpec";
+import type { IAdapterConfigSpec } from "@/features/adapters/types/IAdapterConfigSpec";
 
 export const parseConfig = <T>(
   configStr: string,

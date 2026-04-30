@@ -1,6 +1,6 @@
-import { IAdapterConfigSpec } from "@/features/adapters/types/IAdapterConfigSpec";
-import { IAdapterStateInfoSpec } from "@/features/adapters/types/IAdapterStateInfoSpec";
-import { IAdapterType } from "@/features/adapters/types/IAdapterType";
+import type { IAdapterConfigSpec } from "@/features/adapters/types/IAdapterConfigSpec";
+import type { IAdapterStateInfoSpec } from "@/features/adapters/types/IAdapterStateInfoSpec";
+import type { IAdapterType } from "@/features/adapters/types/IAdapterType";
 
 export interface IAdapterSpec<
   A extends IAdapterType,

@@ -1,23 +1,23 @@
 "use client";
 
-import { Button } from "@/common/components/buttons/Button";
-import { Loader } from "@/common/components/layout/Loader";
-import {
-  Config,
-  IOnConfigChange,
-  IOnConfigError,
-} from "@/features/config/components/Config";
 import {
   faCancel,
   faEdit,
   faRefresh,
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
-import axios, { AxiosResponse } from "axios";
+import axios, { type AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
-import styles from "./Configs.module.scss";
+import { Button } from "@/common/components/buttons/Button";
+import { Loader } from "@/common/components/layout/Loader";
+import {
+  Config,
+  type IOnConfigChange,
+  type IOnConfigError,
+} from "@/features/config/components/Config";
+import styles from "./Configs.module.css";
 
-export const Configs = <T extends Record<string, any>>() => {
+export const Configs = <_T extends Record<string, any>>() => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [configs, setConfigs] = useState<Record<string, string> | undefined>(

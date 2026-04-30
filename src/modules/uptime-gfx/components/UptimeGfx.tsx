@@ -1,11 +1,11 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { getMinuteMark } from "@/common/utils/formatting/datetime";
 import { useApiServerState } from "@/features/api/state/hooks/useApiServerState";
 import { getLogLineParts } from "@/features/log/utils/parsing";
 import { UptimeMark } from "@/modules/uptime-gfx/components/UptimeMark";
-import { useEffect, useMemo, useState } from "react";
-import styles from "./UptimeGfx.module.scss";
+import styles from "./UptimeGfx.module.css";
 
 type IUptimeByMinute = Record<string, string[]>;
 

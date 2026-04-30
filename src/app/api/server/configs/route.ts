@@ -1,11 +1,11 @@
+import fs from "node:fs/promises";
+import path from "node:path";
 import { ADAPTERS } from "@/features/adapters/ADAPTERS";
 import {
   normalizeConfig,
   parseConfig,
   stringifyConfig,
 } from "@/features/config/utils/serialization";
-import fs from "fs/promises";
-import path from "path";
 
 const ADAPTER = ADAPTERS[process.env.NEXT_PUBLIC_ADAPTER];
 

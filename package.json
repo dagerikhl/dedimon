@@ -13,10 +13,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prettify": "prettier -w src/",
-    "prettify:fix": "prettier -w src/"
+    "check": "biome check",
+    "check:fix": "biome check --write",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --write",
+    "format": "biome format",
+    "format:fix": "biome format --write"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "7.2.0",
@@ -37,21 +39,15 @@
     "tail": "2.2.6"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.13",
     "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/tail": "2.2.3",
-    "@next/eslint-plugin-next": "16.2.4",
-    "eslint": "10.2.1",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-react-hooks": "7.1.1",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
     "patch-package": "8.0.1",
     "postinstall-postinstall": "2.1.0",
-    "prettier": "3.8.3",
-    "sass": "1.99.0",
-    "typescript": "6.0.3",
-    "typescript-eslint": "8.59.1"
+    "typescript": "6.0.3"
   }
 }

@@ -1,6 +1,6 @@
 import { ServerRunner } from "@/features/server/singletons/ServerRunner";
 import { LOGGER } from "@/features/server/utils/logger";
-import { IApiServerUpdatePayload } from "@/features/state/types/IApiServerUpdatePayload";
+import type { IApiServerUpdatePayload } from "@/features/state/types/IApiServerUpdatePayload";
 
 // Required to make EventStream work
 export const runtime = "nodejs";
@@ -14,7 +14,7 @@ export const GET = async (req: Request) => {
 
   const serverRunner = ServerRunner.getInstance();
 
-  let responseStream = new TransformStream();
+  const responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
   const encoder = new TextEncoder();
 

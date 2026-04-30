@@ -3,9 +3,9 @@
 import { Code } from "@/common/components/formatting/Code";
 import { Dl } from "@/common/components/layout/Dl";
 import { formatDatetime } from "@/common/utils/formatting/datetime";
-import { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
-import { IPlayer } from "../types/IPlayer";
-import styles from "./PlayerLogView.module.scss";
+import type { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
+import type { IPlayer } from "../types/IPlayer";
+import styles from "./PlayerLogView.module.css";
 
 const getPlayerName = (id: string, players: Record<string, IPlayer>): string =>
   players[id]?.name ?? id;

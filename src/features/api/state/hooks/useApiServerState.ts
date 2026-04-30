@@ -1,5 +1,5 @@
-import { IApiServerState } from "@/features/state/types/IApiServerState";
 import { useSSE } from "react-hooks-sse";
+import type { IApiServerState } from "@/features/state/types/IApiServerState";
 
 const INITIAL_STATE: IApiServerState = { status: "offline" };
 

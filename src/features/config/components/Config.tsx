@@ -1,9 +1,9 @@
+import cz from "classnames";
+import type { ChangeEvent } from "react";
 import { Code } from "@/common/components/formatting/Code";
 import { ADAPTERS } from "@/features/adapters/ADAPTERS";
 import { parseConfig } from "@/features/config/utils/serialization";
-import cz from "classnames";
-import { ChangeEvent } from "react";
-import styles from "./Config.module.scss";
+import styles from "./Config.module.css";
 
 const ADAPTER = ADAPTERS[process.env.NEXT_PUBLIC_ADAPTER];
 

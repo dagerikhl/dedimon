@@ -1,4 +1,4 @@
-import { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
+import type { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
 
 export type IAdapterStateInfoCheckStarted<Info extends Record<string, any>> = (
   data: string,

@@ -1,24 +1,24 @@
 "use client";
 
-import { Button } from "@/common/components/buttons/Button";
-import { Loader } from "@/common/components/layout/Loader";
-import { useInterval } from "@/common/hooks/useInterval";
-import { useApiServerState } from "@/features/api/state/hooks/useApiServerState";
-import { IApiServerState } from "@/features/state/types/IApiServerState";
-import { IApiServerUpdatePayload } from "@/features/state/types/IApiServerUpdatePayload";
-import { ServerStatus } from "@/modules/server-status/components/ServerStatus";
-import {
-  formatDatetime,
-  formatUptime,
-} from "@/common/utils/formatting/datetime";
 import {
   faCloudArrowUp,
   faPlay,
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
-import axios, { AxiosResponse } from "axios";
-import { ChangeEvent, useCallback, useState } from "react";
-import styles from "./State.module.scss";
+import axios, { type AxiosResponse } from "axios";
+import { type ChangeEvent, useCallback, useState } from "react";
+import { Button } from "@/common/components/buttons/Button";
+import { Loader } from "@/common/components/layout/Loader";
+import { useInterval } from "@/common/hooks/useInterval";
+import {
+  formatDatetime,
+  formatUptime,
+} from "@/common/utils/formatting/datetime";
+import { useApiServerState } from "@/features/api/state/hooks/useApiServerState";
+import type { IApiServerState } from "@/features/state/types/IApiServerState";
+import type { IApiServerUpdatePayload } from "@/features/state/types/IApiServerUpdatePayload";
+import { ServerStatus } from "@/modules/server-status/components/ServerStatus";
+import styles from "./State.module.css";
 
 const getUptime = (started: string | undefined): string => {
   if (!started) {

@@ -1,7 +1,7 @@
-import { I7DaysToDieStateInfo } from "@/features/adapters/7-days-to-die/types/I7DaysToDieStateInfo";
-import { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
+import type { I7DaysToDieStateInfo } from "@/features/adapters/7-days-to-die/types/I7DaysToDieStateInfo";
+import type { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
 
-const SEVEN_DAYS_TO_DIE_RE = {
+const _SEVEN_DAYS_TO_DIE_RE = {
   // TODO Fill this if necessary if the bug with no logs proxied is fixed
 };
 

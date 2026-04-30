@@ -37,3 +37,8 @@ next-env.d.ts
 
 # editors
 /.idea/
+
+# ai
+.claude/
+.aider*
+.cursor/

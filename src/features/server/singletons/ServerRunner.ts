@@ -123,7 +123,8 @@ export class ServerRunner {
   }
 
   private createDeathHandler =
-    (resolve: VoidFunction) => (code: number, signal?: number) => {
+    (resolve: VoidFunction) =>
+    ({ exitCode, signal }: { exitCode: number; signal?: number }) => {
       this.setState((current) => ({
         status: "stopped",
         log: current.log,
@@ -132,7 +133,7 @@ export class ServerRunner {
 
       this._serverProcess = undefined;
 
-      LOGGER.info(`Server stopped with code ${code} from signal ${signal}`);
+      LOGGER.info(`Server stopped with code ${exitCode} from signal ${signal}`);
 
       resolve();
     };
@@ -259,10 +260,10 @@ export class ServerRunner {
             ),
           );
         } else {
-          this._serverProcess.on("data", this.createLogHandler(resolve));
+          this._serverProcess.onData(this.createLogHandler(resolve));
         }
 
-        this._serverProcess.on("exit", this.createDeathHandler(resolve));
+        this._serverProcess.onExit(this.createDeathHandler(resolve));
       } catch (e) {
         this.setState({ status: "stopped" });
 
@@ -285,7 +286,7 @@ export class ServerRunner {
 
       this.setState((current) => ({ ...current, status: "stopping" }));
 
-      this._serverProcess.on("exit", this.createDeathHandler(resolve));
+      this._serverProcess.onExit(this.createDeathHandler(resolve));
 
       this._serverProcess.write("\x03");
 

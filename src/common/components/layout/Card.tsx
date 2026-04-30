@@ -12,8 +12,10 @@ import {
 } from "react";
 import styles from "./Card.module.scss";
 
-export interface ICardProps
-  extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {
+export interface ICardProps extends DetailedHTMLProps<
+  HTMLAttributes<HTMLElement>,
+  HTMLElement
+> {
   heading?: ReactNode;
   noPadding?: boolean;
   omitFullscreen?: boolean;

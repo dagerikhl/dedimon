@@ -10,11 +10,10 @@ import styles from "./Button.module.scss";
 
 export type IButtonVariant = "default" | "accent" | "success" | "error";
 
-export interface IButtonProps
-  extends DetailedHTMLProps<
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  > {
+export interface IButtonProps extends DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+> {
   variant?: IButtonVariant;
   icon?: IconProp;
   iconProps?: FontAwesomeIconProps;

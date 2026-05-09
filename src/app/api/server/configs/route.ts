@@ -20,20 +20,19 @@ export const GET = async () => {
 
   const configs: Record<string, string> = {};
   for (const configPath of configPaths) {
-    let config: string;
+    let config = "";
     try {
       config = await fs.readFile(path.resolve(configPath), "utf-8");
     } catch (e) {
       if ((e as Error).message.startsWith("ENOENT")) {
         await fs.mkdir(path.dirname(configPath), { recursive: true });
         await fs.writeFile(path.resolve(configPath), "", "utf-8");
-        config = "";
       } else {
         throw e;
       }
     }
 
-    configs[configPath] = normalizeConfig(config!);
+    configs[configPath] = normalizeConfig(config);
   }
 
   return Response.json(configs);

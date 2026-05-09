@@ -1,14 +1,30 @@
 .container {
-  max-height: 900px;
+  position: relative;
+  height: min(900px, 80vh);
   width: 100%;
-  overflow-y: scroll;
-  padding: var(--space-small);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 16px;
+
+  @media screen and (min-width: 1024px) {
+    height: 100%;
+  }
+}
+
+.virtuoso {
+  height: 100%;
+  width: 100%;
 
   .line {
     display: flex;
     gap: var(--space-x-small);
+    padding: 0 var(--space-small);
+    white-space: pre-wrap;
+    word-break: break-all;
 
     .timestamp {
+      flex-shrink: 0;
+      width: 8ch;
       color: var(--col-acc);
       white-space: nowrap;
     }
@@ -17,18 +33,5 @@
       padding-left: 2ch;
       text-indent: -2ch;
     }
-  }
-
-  > *:not(.scrollAnchor) {
-    overflow-anchor: none;
-  }
-
-  > .scrollAnchor {
-    height: 1px;
-    overflow-anchor: auto;
-  }
-
-  @media screen and (min-width: 1024px) {
-    max-height: unset;
   }
 }

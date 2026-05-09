@@ -302,38 +302,28 @@ export class ServerRunner {
     });
   };
 
-  public update = async (validate: boolean) => {
-    return new Promise<void>(async (resolve, reject) => {
-      if (this._serverProcess) {
-        LOGGER.info("Server currently running, shutting down for update");
+  public update = async (validate: boolean): Promise<void> => {
+    if (this._serverProcess) {
+      LOGGER.info("Server currently running, shutting down for update");
 
-        await this.stop();
-      }
+      await this.stop();
+    }
 
-      this.emitLogAppend([
-        `${"-".repeat(20)} UPDATING SERVER... ${"-".repeat(20)}`,
-      ]);
+    this.emitLogAppend([
+      `${"-".repeat(20)} UPDATING SERVER... ${"-".repeat(20)}`,
+    ]);
 
-      try {
-        const steamCmd = await SteamCmd.init({
-          installDir: this._serverPath,
-          enableDebugLogging: true,
-        });
-
-        for await (const progress of steamCmd.updateApp(this._appId, {
-          validate,
-        })) {
-          this.emitLogAppend([formatSteamCmdProgress(progress)]);
-        }
-
-        this.emitLogAppend([
-          `${"-".repeat(20)} UPDATE COMPLETE ${"-".repeat(20)}`,
-        ]);
-
-        resolve();
-      } catch (e) {
-        reject(e);
-      }
+    const steamCmd = await SteamCmd.init({
+      installDir: this._serverPath,
+      enableDebugLogging: true,
     });
+
+    for await (const progress of steamCmd.updateApp(this._appId, {
+      validate,
+    })) {
+      this.emitLogAppend([formatSteamCmdProgress(progress)]);
+    }
+
+    this.emitLogAppend([`${"-".repeat(20)} UPDATE COMPLETE ${"-".repeat(20)}`]);
   };
 }

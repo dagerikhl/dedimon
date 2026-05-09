@@ -10,7 +10,14 @@ export type IAdapterStateInfoGetter<Info extends Record<string, any>> = (
   current: IApiServerStateInfo<Info> | undefined,
 ) => IApiServerStateInfo<Info>;
 
+export type IAdapterLogEventCategory = "player" | "save" | "error";
+
+export type IAdapterCategorizeLogLine = (
+  line: string,
+) => IAdapterLogEventCategory | undefined;
+
 export interface IAdapterStateInfoSpec<Info extends Record<string, any>> {
   checkStarted: IAdapterStateInfoCheckStarted<Info>;
   infoGetters: IAdapterStateInfoGetter<Info>[];
+  categorizeLogLine?: IAdapterCategorizeLogLine;
 }

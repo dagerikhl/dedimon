@@ -38,6 +38,13 @@ export const RTM_ADAPTER_SPEC: IAdapterSpec<"rtm", IRtmServerStateInfo> = {
     },
   },
   stateInfoSpec: {
+    categorizeLogLine: (line) => {
+      if (RTM_RE.serverSaved.test(line)) return "save";
+      if (RTM_RE.playerJoined.test(line) || RTM_RE.playerLeft.test(line))
+        return "player";
+      if (/error/i.test(line)) return "error";
+      return undefined;
+    },
     checkStarted: (data, _current) => /The session is now open!/i.test(data),
     infoGetters: [
       (data, _current) => ({

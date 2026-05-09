@@ -30,6 +30,16 @@ export const SOULMASK_ADAPTER_SPEC: IAdapterSpec<
     },
   },
   stateInfoSpec: {
+    categorizeLogLine: (line) => {
+      if (SOULMASK_RE.serverSaved.test(line)) return "save";
+      if (
+        SOULMASK_RE.playerJoined.test(line) ||
+        SOULMASK_RE.playerLeft.test(line)
+      )
+        return "player";
+      if (/error/i.test(line)) return "error";
+      return undefined;
+    },
     checkStarted: (data, _current) => /^CREATE_TIME:\s+\d+/i.test(data),
     infoGetters: [
       (data, _current) => ({

@@ -38,6 +38,13 @@ export const ASKA_ADAPTER_SPEC: IAdapterSpec<"aska", IAskaServerStateInfo> = {
     },
   },
   stateInfoSpec: {
+    categorizeLogLine: (line) => {
+      if (ASKA_RE.serverSaved.test(line)) return "save";
+      if (ASKA_RE.playerJoined.test(line) || ASKA_RE.playerLeft.test(line))
+        return "player";
+      if (/error/i.test(line)) return "error";
+      return undefined;
+    },
     checkStarted: (data, _current) => /The session is now open!/i.test(data),
     infoGetters: [
       (data, _current) => ({

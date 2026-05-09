@@ -37,6 +37,16 @@ export const V_RISING_ADAPTER_SPEC: IAdapterSpec<
     },
   },
   stateInfoSpec: {
+    categorizeLogLine: (line) => {
+      if (V_RISING_RE.serverSaved.test(line)) return "save";
+      if (
+        V_RISING_RE.playerJoined.test(line) ||
+        V_RISING_RE.playerLeft.test(line)
+      )
+        return "player";
+      if (/error/i.test(line)) return "error";
+      return undefined;
+    },
     checkStarted: (data, _current) =>
       /\[Server] Shutting down Asynchronous Streaming/i.test(data),
     infoGetters: [

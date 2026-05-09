@@ -34,6 +34,16 @@ export const ENSHROUDED_ADAPTER_SPEC: IAdapterSpec<
     },
   },
   stateInfoSpec: {
+    categorizeLogLine: (line) => {
+      if (ENSHROUDED_RE.serverSaved.test(line)) return "save";
+      if (
+        ENSHROUDED_RE.playerJoined.test(line) ||
+        ENSHROUDED_RE.playerLeft.test(line)
+      )
+        return "player";
+      if (/error/i.test(line)) return "error";
+      return undefined;
+    },
     checkStarted: (data, _current) =>
       /\[Session] 'HostOnline' \(up\)!/i.test(data),
     infoGetters: [

@@ -1,5 +1,43 @@
 .container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.grid {
+  position: absolute;
+  top: 14px;
+  bottom: 1px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      to top,
+      transparent calc(25% - 0.5px),
+      color-mix(in srgb, var(--brd-pri) 60%, transparent) calc(25% - 0.5px),
+      color-mix(in srgb, var(--brd-pri) 60%, transparent) calc(25% + 0.5px),
+      transparent calc(25% + 0.5px)
+    ),
+    linear-gradient(
+      to top,
+      transparent calc(50% - 0.5px),
+      color-mix(in srgb, var(--brd-pri) 60%, transparent) calc(50% - 0.5px),
+      color-mix(in srgb, var(--brd-pri) 60%, transparent) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    ),
+    linear-gradient(
+      to top,
+      transparent calc(75% - 0.5px),
+      color-mix(in srgb, var(--brd-pri) 60%, transparent) calc(75% - 0.5px),
+      color-mix(in srgb, var(--brd-pri) 60%, transparent) calc(75% + 0.5px),
+      transparent calc(75% + 0.5px)
+    );
+}
+
+.marks {
+  position: relative;
+  height: 100%;
   width: 100%;
   display: flex;
-  gap: var(--space-x-small);
 }

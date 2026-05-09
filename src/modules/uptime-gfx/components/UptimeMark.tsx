@@ -78,10 +78,9 @@ export const UptimeMark = ({
             )}
           </div>
         )}
-        {isStart && <div className={styles.startMarker} />}
       </div>
       <div className={styles.separator} />
-      <div className={styles.bottomLabel} />
+      {isStart && <div className={styles.startMarker} />}
     </div>
   );
 };

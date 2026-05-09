@@ -132,23 +132,26 @@ export const UptimeGfx = () => {
 
   return (
     <div className={styles.container}>
-      {minutesToShow.map((x) => {
-        const data = aggregate.get(x) ?? EMPTY_AGGREGATE;
-        const minute = Number(x.slice(-2));
-        const showLabel = minute % LABEL_INTERVAL_MINUTES === 0;
+      <div className={styles.grid} />
+      <div className={styles.marks}>
+        {minutesToShow.map((x) => {
+          const data = aggregate.get(x) ?? EMPTY_AGGREGATE;
+          const minute = Number(x.slice(-2));
+          const showLabel = minute % LABEL_INTERVAL_MINUTES === 0;
 
-        return (
-          <UptimeMark
-            key={x}
-            x={x}
-            yMax={yMax}
-            data={data}
-            isStart={startMinutes.has(x)}
-            isLive={x === currentMinute}
-            label={showLabel ? x.slice(-5) : undefined}
-          />
-        );
-      })}
+          return (
+            <UptimeMark
+              key={x}
+              x={x}
+              yMax={yMax}
+              data={data}
+              isStart={startMinutes.has(x)}
+              isLive={x === currentMinute}
+              label={showLabel ? x.slice(-5) : undefined}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

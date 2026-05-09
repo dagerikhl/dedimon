@@ -18,12 +18,10 @@ export const GET = async (req: Request) => {
   const writer = responseStream.writable.getWriter();
   const encoder = new TextEncoder();
 
-  const _unsubscribe = serverRunner.subscribe((state) => {
-    const data = JSON.stringify(state);
+  const _unsubscribe = serverRunner.subscribe((event) => {
+    const data = JSON.stringify(event);
 
     writer.write(encoder.encode(`event: message\ndata: ${data}\n\n`));
-
-    LOGGER.info("[state] Sent message event for status:", state.status);
   });
 
   req.signal.addEventListener("abort", async () => {

@@ -6,46 +6,15 @@ import { Tail } from "tail";
 import { ADAPTERS } from "@/features/adapters/ADAPTERS";
 import type { IAdapterType } from "@/features/adapters/types/IAdapterType";
 import { getTimestamp, LOGGER } from "@/features/server/utils/logger";
+import type { IApiServerEvent } from "@/features/state/types/IApiServerEvent";
 import type { IApiServerState } from "@/features/state/types/IApiServerState";
 import type { IApiServerStateInfo } from "@/features/state/types/IApiServerStateInfo";
+import { mergeInfo } from "@/features/state/utils/mergeInfo";
 
-type ISetter<S> = S | ((prevState: S) => S);
-
-type ISubscribeCallback = (state: IApiServerState) => void;
+type ISubscribeCallback = (event: IApiServerEvent) => void;
 type IUnsubscribeCallback = () => void;
 
 type ILogLineTransformer = (data: string) => string;
-
-const mergeLog = (log: string[] | undefined, newLogEntry: string): string[] => [
-  ...(log ?? []),
-  newLogEntry,
-];
-
-const mergeInfo = <Info extends Record<string, any>>(
-  info: IApiServerStateInfo<Info> | undefined,
-  newInfo: IApiServerStateInfo<Info>,
-): IApiServerStateInfo<Info> | undefined => {
-  const mergedInfo: IApiServerStateInfo<Info> = {
-    ...info,
-  } as IApiServerStateInfo<Info>;
-
-  for (const [key, value] of Object.entries(newInfo)) {
-    if (value === null || value === undefined) {
-      continue;
-    }
-
-    mergedInfo[key as keyof IApiServerStateInfo<Info>] = value;
-  }
-
-  if (
-    Object.values(mergedInfo).filter((x) => x !== null && x !== undefined)
-      .length === 0
-  ) {
-    return undefined;
-  }
-
-  return mergedInfo;
-};
 
 const normalizeLogLine = (line: string): string =>
   line
@@ -125,11 +94,7 @@ export class ServerRunner {
   private createDeathHandler =
     (resolve: VoidFunction) =>
     ({ exitCode, signal }: { exitCode: number; signal?: number }) => {
-      this.setState((current) => ({
-        status: "stopped",
-        log: current.log,
-        info: current.info,
-      }));
+      this.emitStatePatch({ status: "stopped", started: null });
 
       this._serverProcess = undefined;
 
@@ -163,37 +128,69 @@ export class ServerRunner {
 
       const newLogEntry = `${getTimestamp()} ${transformedData}`;
 
+      this.emitLogAppend([newLogEntry]);
+
+      const hasInfoChange = Object.keys(info).length > 0;
+
       if (
         adapterSpec.stateInfoSpec.checkStarted(
           transformedData,
           this.getState().info,
         )
       ) {
-        this.setState((current) => ({
+        this.emitStatePatch({
           status: "running",
           started: new Date().toISOString(),
-          log: mergeLog(current.log, newLogEntry),
-          info: mergeInfo(current.info, info),
-        }));
+          info: hasInfoChange ? info : undefined,
+        });
 
         resolve();
-      } else {
-        this.setState((current) => ({
-          ...current,
-          log: mergeLog(current.log, newLogEntry),
-          info: mergeInfo(current.info, info),
-        }));
+      } else if (hasInfoChange) {
+        this.emitStatePatch({ info });
       }
     };
 
   public getState = (): IApiServerState => this._state;
 
-  private setState = (state: ISetter<IApiServerState>) => {
-    this._state = typeof state === "function" ? state(this._state) : state;
-
+  private emit = (event: IApiServerEvent) => {
     this._subscribers.forEach((value) => {
-      value(this._state);
+      value(event);
     });
+  };
+
+  private emitSnapshot = (state: IApiServerState) => {
+    this._state = state;
+
+    this.emit({ kind: "snapshot", state });
+  };
+
+  private emitStatePatch = (patch: {
+    status?: IApiServerState["status"];
+    started?: string | null;
+    info?: Partial<IApiServerStateInfo<Record<string, any>>>;
+  }) => {
+    if (patch.status !== undefined) {
+      this._state.status = patch.status;
+    }
+    if (patch.started !== undefined) {
+      this._state.started = patch.started ?? undefined;
+    }
+    if (patch.info !== undefined) {
+      this._state.info = mergeInfo(this._state.info, patch.info);
+    }
+
+    this.emit({ kind: "state-patch", patch });
+  };
+
+  private emitLogAppend = (entries: string[]) => {
+    if (!this._state.log) {
+      this._state.log = [];
+    }
+    for (const entry of entries) {
+      this._state.log.push(entry);
+    }
+
+    this.emit({ kind: "log-append", entries });
   };
 
   public subscribe = (cb: ISubscribeCallback): IUnsubscribeCallback => {
@@ -201,7 +198,7 @@ export class ServerRunner {
 
     this._subscribers.set(id, cb);
 
-    cb(this.getState());
+    cb({ kind: "snapshot", state: this._state });
 
     LOGGER.info("Subscription added, now:", this._subscribers.size);
 
@@ -224,7 +221,7 @@ export class ServerRunner {
         return;
       }
 
-      this.setState({ status: "starting" });
+      this.emitSnapshot({ status: "starting", log: [] });
 
       try {
         LOGGER.info(
@@ -265,7 +262,7 @@ export class ServerRunner {
 
         this._serverProcess.onExit(this.createDeathHandler(resolve));
       } catch (e) {
-        this.setState({ status: "stopped" });
+        this.emitSnapshot({ status: "stopped" });
 
         reject(e);
       }
@@ -284,7 +281,7 @@ export class ServerRunner {
         return;
       }
 
-      this.setState((current) => ({ ...current, status: "stopping" }));
+      this.emitStatePatch({ status: "stopping" });
 
       this._serverProcess.onExit(this.createDeathHandler(resolve));
 
@@ -313,13 +310,9 @@ export class ServerRunner {
         await this.stop();
       }
 
-      this.setState((current) => ({
-        ...current,
-        log: mergeLog(
-          current.log,
-          `${"-".repeat(20)} UPDATING SERVER... ${"-".repeat(20)}`,
-        ),
-      }));
+      this.emitLogAppend([
+        `${"-".repeat(20)} UPDATING SERVER... ${"-".repeat(20)}`,
+      ]);
 
       try {
         const steamCmd = await SteamCmd.init({
@@ -330,19 +323,12 @@ export class ServerRunner {
         for await (const progress of steamCmd.updateApp(this._appId, {
           validate,
         })) {
-          this.setState((current) => ({
-            ...current,
-            log: mergeLog(current.log, formatSteamCmdProgress(progress)),
-          }));
+          this.emitLogAppend([formatSteamCmdProgress(progress)]);
         }
 
-        this.setState((current) => ({
-          ...current,
-          log: mergeLog(
-            current.log,
-            `${"-".repeat(20)} UPDATE COMPLETE ${"-".repeat(20)}`,
-          ),
-        }));
+        this.emitLogAppend([
+          `${"-".repeat(20)} UPDATE COMPLETE ${"-".repeat(20)}`,
+        ]);
 
         resolve();
       } catch (e) {

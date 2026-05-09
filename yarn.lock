@@ -312,6 +312,14 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-16.2.4.tgz#8252d02b505be5025dee62628859761e0bb11597"
   integrity sha512-kMVGgsqhO5YTYODD9IPGGhA6iprWidQckK3LmPeW08PIFENRmgfb4MjXHO+p//d+ts2rpjvK5gXWzXSMrPl9cw==
 
+"@playwright/mcp@0.0.75":
+  version "0.0.75"
+  resolved "https://registry.yarnpkg.com/@playwright/mcp/-/mcp-0.0.75.tgz#20f3a1ebf10e032626984d51062e7b0f3468d4cf"
+  integrity sha512-oBjzVXfEGZ9Ev45tKKQULNDVdF83B82lg0uPejEK3xsp/zWmdNdNVnPi032fmd/o20ZZXs+LX7cr77qRNbV4VA==
+  dependencies:
+    playwright "1.61.0-alpha-1778188671000"
+    playwright-core "1.61.0-alpha-1778188671000"
+
 "@sec-ant/readable-stream@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@sec-ant/readable-stream/-/readable-stream-0.4.1.tgz#60de891bb126abfdc5410fdc6166aca065f10a0c"
@@ -723,6 +731,11 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
+
+fsevents@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.2:
   version "1.1.2"
@@ -1191,6 +1204,20 @@ picomatch@^4.0.3:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.4.tgz#fd6f5e00a143086e074dffe4c924b8fb293b0589"
   integrity sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==
+
+playwright-core@1.61.0-alpha-1778188671000:
+  version "1.61.0-alpha-1778188671000"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.61.0-alpha-1778188671000.tgz#61c5d07cc7120addefd2b777514e511c073a2dfb"
+  integrity sha512-nsw2Crz0uZS3IRHiEcOXUt+RaKB/Hna+GAD4oD6cPqCHfJfW77cJdgktC0jzp3Ndyv23EJI3bcWSqFIiqSNE5A==
+
+playwright@1.61.0-alpha-1778188671000:
+  version "1.61.0-alpha-1778188671000"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.61.0-alpha-1778188671000.tgz#c1e9a294b72d553b09702a569cec26d148d00047"
+  integrity sha512-A6fFc7ExLRmvm0ZHqCyY2uHXSvEdpb8W+/HyIPK4ecRqNil8Mc1Vig1WFYoqk82x3+U9Qb571fQE95wgKqIQ1g==
+  dependencies:
+    playwright-core "1.61.0-alpha-1778188671000"
+  optionalDependencies:
+    fsevents "2.3.2"
 
 postcss@8.4.31:
   version "8.4.31"

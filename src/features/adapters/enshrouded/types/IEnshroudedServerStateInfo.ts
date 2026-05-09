@@ -1,3 +1,5 @@
+import type { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
+
 export interface IEnshroudedServerStateInfo {
   gameVersion?: string;
   baseCount?: number;
@@ -8,4 +10,6 @@ export interface IEnshroudedServerStateInfo {
   playerCount?: number;
   lastLoggedOn?: string;
   lastLoggedOff?: string;
+  players?: string;
+  playerLog?: IPlayerLog;
 }

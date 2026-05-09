@@ -2,11 +2,15 @@ import { formatDatetime } from "@/common/utils/formatting/datetime";
 import { toNumberIfDefined } from "@/common/utils/general/toNumberIfDefined";
 import type { IEnshroudedServerStateInfo } from "@/features/adapters/enshrouded/types/IEnshroudedServerStateInfo";
 import type { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
+import type { IPlayer } from "@/features/player-log/types/IPlayer";
+import type { IPlayerLog } from "@/features/player-log/types/IPlayerLog";
+import type { IPlayerLogEntry } from "@/features/player-log/types/IPlayerLogEntry";
+import type { IPlayerLogEvent } from "@/features/player-log/types/IPlayerLogEvent";
 
 const ENSHROUDED_RE = {
   serverSaved: /\[server] Saved/i,
-  playerJoined: /\[server] Player '?.+'? logged in/i,
-  playerLeft: /\[server] Remove Player '?.+'?/i,
+  playerJoined: /\[server] Player '(.+?)' logged in/i,
+  playerLeft: /\[server] Remove Player '(.+?)'/i,
 };
 
 export const ENSHROUDED_ADAPTER_SPEC: IAdapterSpec<
@@ -59,27 +63,84 @@ export const ENSHROUDED_ADAPTER_SPEC: IAdapterSpec<
           ? (current?.savedCount ?? 0) + 1
           : undefined,
       }),
-      (data, current) => {
-        let currentPlayerCount = current?.playerCount ?? 0;
-        let isJoinEvent = false;
-        let isLeaveEvent = false;
+      (data, _current) => {
         if (ENSHROUDED_RE.playerJoined.test(data)) {
-          isJoinEvent = true;
-          currentPlayerCount++;
+          return {
+            lastLoggedOn: formatDatetime(new Date(), true),
+          };
         }
+
         if (ENSHROUDED_RE.playerLeft.test(data)) {
-          isLeaveEvent = true;
-          currentPlayerCount--;
+          return {
+            lastLoggedOff: formatDatetime(new Date(), true),
+          };
+        }
+
+        return {};
+      },
+      (data, current) => {
+        const playerLog: IPlayerLog = current?.playerLog ?? {
+          players: {},
+          currentPlayers: [],
+          entries: [],
+        };
+
+        const players = new Set(
+          current?.players ? current.players.split(", ") : [],
+        );
+
+        let playerId: string | undefined;
+        let playerLogEvent: IPlayerLogEvent | undefined;
+
+        const joinedPlayerMatch = data.match(ENSHROUDED_RE.playerJoined);
+        if (joinedPlayerMatch?.[1]) {
+          playerId = joinedPlayerMatch[1];
+          playerLogEvent = "logged-on";
+
+          players.add(playerId);
+        }
+
+        const leftPlayer = data.match(ENSHROUDED_RE.playerLeft)?.[1];
+        if (leftPlayer) {
+          playerId = leftPlayer;
+          playerLogEvent = "logged-off";
+
+          players.delete(playerId);
+        }
+
+        if (playerId && playerLogEvent) {
+          const player: IPlayer = {
+            id: playerId,
+            name: playerId,
+            player: playerId,
+          };
+
+          playerLog.players[playerId] = player;
+
+          const nextCurrentPlayersSet = new Set(playerLog.currentPlayers);
+          if (playerLogEvent === "logged-on") {
+            nextCurrentPlayersSet.add(playerId);
+          } else {
+            nextCurrentPlayersSet.delete(playerId);
+          }
+
+          const playerLogEntry: IPlayerLogEntry = {
+            id: playerId,
+            event: playerLogEvent,
+            timestamp: new Date(),
+            prevCurrentPlayers: [...playerLog.currentPlayers],
+            nextCurrentPlayers: Array.from(nextCurrentPlayersSet),
+          };
+
+          playerLog.currentPlayers = Array.from(nextCurrentPlayersSet);
+
+          playerLog.entries.unshift(playerLogEntry);
         }
 
         return {
-          playerCount: currentPlayerCount,
-          lastLoggedOn: isJoinEvent
-            ? formatDatetime(new Date(), true)
-            : undefined,
-          lastLoggedOff: isLeaveEvent
-            ? formatDatetime(new Date(), true)
-            : undefined,
+          players: Array.from(players).join(", "),
+          playerCount: players.size,
+          playerLog,
         };
       },
     ],

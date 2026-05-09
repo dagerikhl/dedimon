@@ -5,8 +5,8 @@ import type { IAdapterSpec } from "@/features/adapters/types/IAdapterSpec";
 
 const ENSHROUDED_RE = {
   serverSaved: /\[server] Saved/i,
-  playerJoined: /\[online] Added Peer #\d+/i,
-  playerLeft: /\[online] Removed Peer #\d+/i,
+  playerJoined: /\[server] Player '?.+'? logged in/i,
+  playerLeft: /\[server] Remove Player '?.+'?/i,
 };
 
 export const ENSHROUDED_ADAPTER_SPEC: IAdapterSpec<

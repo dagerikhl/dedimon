@@ -1,6 +1,37 @@
 .container {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--space-medium);
+  gap: var(--space-small);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  background-color: var(--status-color, var(--frt-sec));
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--status-color, var(--frt-sec)) 60%, transparent);
+}
+
+.transitional {
+  animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+.text {
+  color: var(--frt-pri);
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
 }

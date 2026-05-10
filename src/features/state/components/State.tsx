@@ -20,9 +20,9 @@ import type { IApiServerUpdatePayload } from "@/features/state/types/IApiServerU
 import { ServerStatus } from "@/modules/server-status/components/ServerStatus";
 import styles from "./State.module.css";
 
-const getUptime = (started: string | undefined): string => {
+const getUptime = (started: string | undefined): string | undefined => {
   if (!started) {
-    return "-";
+    return undefined;
   }
 
   const now = new Date();
@@ -100,15 +100,21 @@ export const State = () => {
   return (
     <>
       <div className={styles.container}>
-        <ServerStatus className={styles.status} status={state.status} />
+        <div className={styles.statusGroup}>
+          <ServerStatus status={state.status} />
 
-        <div className={styles.uptime}>
-          Uptime: {uptime}{" "}
-          {state.started ? (
-            <span className={styles.uptimeStarted}>
-              ({formatDatetime(state.started)})
-            </span>
-          ) : null}
+          {state.started && (
+            <dl className={styles.metrics}>
+              <div>
+                <dt>Uptime</dt>
+                <dd>{uptime ?? "—"}</dd>
+              </div>
+              <div>
+                <dt>Since</dt>
+                <dd>{formatDatetime(state.started)}</dd>
+              </div>
+            </dl>
+          )}
         </div>
 
         <div className={styles.actions}>

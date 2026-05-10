@@ -1,11 +1,3 @@
-import {
-  faBan,
-  faCircleQuestion,
-  faPlay,
-  faSpinner,
-  faStop,
-} from "@fortawesome/free-solid-svg-icons";
-import type { FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
 import type { IServerStatus } from "@/modules/server-status/types/IServerStatus";
 
 export const formatServerStatus = (
@@ -32,13 +24,10 @@ export const getServerStatusColor = (
 ): string | undefined => {
   switch (status) {
     case "starting":
-      return "var(--col-pos)";
     case "running":
       return "var(--col-pos)";
     case "stopping":
-      return "var(--col-neg)";
     case "stopped":
-      return "var(--col-neg)";
     case "offline":
       return "var(--col-neg)";
     default:
@@ -46,21 +35,6 @@ export const getServerStatusColor = (
   }
 };
 
-export const getServerStatusIconProps = (
+export const isServerStatusTransitional = (
   status: IServerStatus | undefined,
-): FontAwesomeIconProps => {
-  switch (status) {
-    case "starting":
-      return { icon: faSpinner, spinPulse: true };
-    case "running":
-      return { icon: faPlay };
-    case "stopping":
-      return { icon: faSpinner, spinPulse: true };
-    case "stopped":
-      return { icon: faStop };
-    case "offline":
-      return { icon: faBan };
-    default:
-      return { icon: faCircleQuestion };
-  }
-};
+): boolean => status === "starting" || status === "stopping";

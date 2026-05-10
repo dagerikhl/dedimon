@@ -1,10 +1,10 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cz from "classnames";
+import type { CSSProperties } from "react";
 import type { IServerStatus } from "@/modules/server-status/types/IServerStatus";
 import {
   formatServerStatus,
   getServerStatusColor,
-  getServerStatusIconProps,
+  isServerStatusTransitional,
 } from "@/modules/server-status/utils/formatting";
 import styles from "./ServerStatus.module.css";
 
@@ -13,14 +13,20 @@ export interface IServerStatusProps {
   status?: IServerStatus;
 }
 
-export const ServerStatus = ({ className, status }: IServerStatusProps) => (
-  <div className={cz(className, styles.container)}>
-    <FontAwesomeIcon
-      {...getServerStatusIconProps(status)}
-      size="2xl"
-      color={getServerStatusColor(status)}
-    />
+export const ServerStatus = ({ className, status }: IServerStatusProps) => {
+  const style = {
+    "--status-color": getServerStatusColor(status),
+  } as CSSProperties;
 
-    <div>{formatServerStatus(status)}</div>
-  </div>
-);
+  return (
+    <div className={cz(className, styles.container)} style={style}>
+      <div
+        className={cz(styles.dot, {
+          [styles.transitional]: isServerStatusTransitional(status),
+        })}
+      />
+
+      <div className={styles.text}>{formatServerStatus(status)}</div>
+    </div>
+  );
+};

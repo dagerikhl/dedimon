@@ -1,51 +1,95 @@
 .container {
   flex: 1;
-  display: grid;
-  grid-template-areas:
-    "status actions uptime"
-    "status actions update";
-  grid-template-columns: 100px auto 1fr;
-  grid-template-rows: auto auto;
-  justify-items: center;
+  display: flex;
   align-items: center;
-  gap: var(--space-medium) var(--space-large);
+  gap: var(--space-x-large);
+  padding: var(--space-medium) var(--space-large);
 }
 
-.status {
-  grid-area: status;
-  justify-self: stretch;
-  padding: var(--space-large);
-  border: 1px solid var(--brd-pri);
-  border-radius: var(--border-radius);
+.statusGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);
 }
 
-.uptime {
-  grid-area: uptime;
-  justify-self: end;
+.metrics {
+  display: flex;
+  gap: var(--space-x-large);
 
-  .uptimeStarted {
+  dt {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--frt-sec);
+    margin-bottom: 2px;
+  }
+
+  dd {
+    font-size: 13px;
+    color: var(--frt-pri);
   }
 }
 
 .actions {
-  grid-area: actions;
   display: flex;
   flex-direction: column;
-  gap: var(--space-small);
+  gap: var(--space-x-small);
+
+  > * {
+    justify-content: center;
+  }
 }
 
 .update {
-  grid-area: update;
-  justify-self: end;
+  margin-left: auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: var(--space-x-small);
+  align-items: stretch;
+  gap: var(--space-small);
 
-  .validateUpdate {
-    display: flex;
-    align-items: center;
-    gap: var(--space-x-small);
+  > button {
+    justify-content: center;
+  }
+}
+
+.validateUpdate {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-x-small);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--frt-sec);
+  cursor: pointer;
+  user-select: none;
+
+  input[type="checkbox"] {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    margin: 0;
+    border: 1px solid var(--brd-pri);
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+
+    &:checked {
+      border-color: var(--col-acc);
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        right: 1px;
+        bottom: 1px;
+        background-color: var(--col-acc);
+      }
+    }
+
+    &:focus-visible {
+      outline: 1px solid var(--col-acc);
+      outline-offset: 1px;
+    }
   }
 }

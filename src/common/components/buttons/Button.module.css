@@ -3,41 +3,60 @@
   align-items: center;
   gap: var(--space-x-small);
   padding: var(--space-x-small) var(--space-small);
-  border: 2px solid var(--brd-pri);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--brd-pri);
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--frt-pri);
 
   &:disabled {
     filter: contrast(0.2) grayscale(1);
     cursor: not-allowed;
   }
+
   &:not(:disabled) {
     cursor: pointer;
 
     &:hover {
-      border: 2px solid var(--col-acc);
+      border-color: var(--col-acc);
+      color: var(--col-acc);
     }
   }
 
   &.default {
-    color: var(--frt-pri-anti);
-    background-color: var(--bkg-pri-anti);
-  }
-
-  &.accent,
-  &.success,
-  &.error {
-    color: var(--col-on-accent);
+    /* uses base styling */
   }
 
   &.accent {
-    background-color: var(--col-acc);
+    border-color: var(--col-acc);
+    color: var(--col-acc);
+
+    &:not(:disabled):hover {
+      background-color: color-mix(in srgb, var(--col-acc) 15%, transparent);
+    }
   }
 
   &.success {
-    background-color: var(--col-pos);
+    border-color: var(--col-pos);
+    color: var(--col-pos);
+
+    &:not(:disabled):hover {
+      background-color: color-mix(in srgb, var(--col-pos) 15%, transparent);
+      border-color: var(--col-pos);
+      color: var(--col-pos);
+    }
   }
 
   &.error {
-    background-color: var(--col-neg);
+    border-color: var(--col-neg);
+    color: var(--col-neg);
+
+    &:not(:disabled):hover {
+      background-color: color-mix(in srgb, var(--col-neg) 15%, transparent);
+      border-color: var(--col-neg);
+      color: var(--col-neg);
+    }
   }
 }

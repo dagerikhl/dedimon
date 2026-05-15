@@ -313,17 +313,28 @@ export class ServerRunner {
       `${"-".repeat(20)} UPDATING SERVER... ${"-".repeat(20)}`,
     ]);
 
-    const steamCmd = await SteamCmd.init({
-      installDir: this._serverPath,
-      enableDebugLogging: true,
-    });
+    try {
+      const steamCmd = await SteamCmd.init({
+        installDir: this._serverPath,
+        enableDebugLogging: true,
+      });
 
-    for await (const progress of steamCmd.updateApp(this._appId, {
-      validate,
-    })) {
-      this.emitLogAppend([formatSteamCmdProgress(progress)]);
+      for await (const progress of steamCmd.updateApp(this._appId, {
+        validate,
+      })) {
+        this.emitLogAppend([formatSteamCmdProgress(progress)]);
+      }
+
+      this.emitLogAppend([
+        `${"-".repeat(20)} UPDATE COMPLETE ${"-".repeat(20)}`,
+      ]);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      LOGGER.error("Server update failed:", message);
+      this.emitLogAppend([
+        `${"-".repeat(20)} UPDATE FAILED ${"-".repeat(20)}`,
+        message,
+      ]);
     }
-
-    this.emitLogAppend([`${"-".repeat(20)} UPDATE COMPLETE ${"-".repeat(20)}`]);
   };
 }

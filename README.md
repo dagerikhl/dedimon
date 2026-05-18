@@ -18,9 +18,11 @@ Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts` and 
 
 - [7 Days to Die (`7-days-to-die`)](https://7daystodie.com/)
   - _Note: We're currently unable to proxy the logs from the server terminal, so specifying a path to a log file in `SERVER_LOG_PATH` is required for the server to fully work._
-  - _Note: There seems to be some issues with writing the logfile, so currently this doesn't work either (working on issue). The server should still start, but you won't get much output, making major parts of the application unusable. See the 7 Days terminal for output and configure the 7 Days web UI for logs and interaction._
+  - _Note: There seems to be some issues with writing the logfile, so currently this doesn't work either. The server should still start, but you won't get much output, making major parts of the application unusable. See the 7 Days terminal for output and configure the 7 Days web UI for logs and interaction._
 - [Aska (`aska`)](https://playaska.com/)
 - [Enshrouded (`enshrouded`)](https://enshrouded.com/)
+- [Palworld (`palworld`)](https://www.pocketpair.jp/en/games-en/palworld-en/)
+  - _Note: Logs for Palworld might be slightly misformed: extra linebreaks or some random characters might be included._
 - [Return to Moria (`rtm`)](https://www.returntomoria.com/)
 - [Soulmask (`soulmask`)](https://mask.qoolandgames.com/)
   - _Prerequisite: This server requires Steam to be installed on your system to run (specifically it requires som DLL files that is shipped with Steam)._
@@ -79,6 +81,19 @@ SERVER_PATH="C:\Games\Servers\EnshroudedServer"
 SERVER_EXE_PATH="C:\Games\Servers\EnshroudedServer\enshrouded_server.exe"
 SERVER_EXE_ARGS=""
 SERVER_CONFIG_PATHS="C:\Games\Servers\EnshroudedServer\enshrouded_server.json"
+SERVER_LOG_PATH=""
+```
+
+##### Palworld
+
+```dotenv
+NEXT_PUBLIC_ADAPTER="palworld"
+APP_ID="2394010"
+SERVER_PATH="C:\Games\Servers\Palworld_Server"
+# You should use the nested -Cmd.exe instead of the root PalServer.exe for the logs to be properly shown in Dedimon
+SERVER_EXE_PATH="C:\Games\Servers\Palworld_Server\Pal\Binaries\Win64\PalServer-Win64-Shipping-Cmd.exe"
+SERVER_EXE_ARGS="-port=8211,-publiclobby,-publicport=8212"
+SERVER_CONFIG_PATHS="C:\Games\Servers\Palworld_Server\Pal\Saved\Config\WindowsServer\PalWorldSettings.ini"
 SERVER_LOG_PATH=""
 ```
 

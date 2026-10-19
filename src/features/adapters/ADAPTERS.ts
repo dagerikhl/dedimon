@@ -5,6 +5,7 @@ import { PALWORLD_ADAPTER_SPEC } from "@/features/adapters/palworld/spec";
 import { RTM_ADAPTER_SPEC } from "@/features/adapters/rtm/spec";
 import { SOULMASK_ADAPTER_SPEC } from "@/features/adapters/soulmask/spec";
 import { V_RISING_ADAPTER_SPEC } from "@/features/adapters/v-rising/spec";
+import { VALHEIM_ADAPTER_SPEC } from "@/features/adapters/valheim/spec";
 
 export const ADAPTERS = {
   aska: ASKA_ADAPTER_SPEC,
@@ -14,4 +15,5 @@ export const ADAPTERS = {
   rtm: RTM_ADAPTER_SPEC,
   soulmask: SOULMASK_ADAPTER_SPEC,
   "v-rising": V_RISING_ADAPTER_SPEC,
+  valheim: VALHEIM_ADAPTER_SPEC,
 };

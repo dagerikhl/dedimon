@@ -29,6 +29,8 @@ Supported adapters/games (see `src/features/adapters/types/IAdapterType.ts` and 
   - _Note: We're currently unable to proxy the logs from the server terminal, so specifying a path to a log file in `SERVER_LOG_PATH` is required for the server to fully work._
   - _Note: There are currently issues with the config file, so you may need to pass additional arguments to `SERVER_EXE_ARGS`: `-SteamServerName=<YOUR_SERVER_NAME>,-PSW=<your-password>,-Port=<your-port>,-QueryPort=<your-query-port>,-adminpsw=<your-admin-password>`._
 - [V-rising (`v-rising`)](https://playvrising.com/)
+- [Valheim (`valheim`)](https://www.valheimgame.com/)
+  - _Note: Requires you to use a `.bat`-file to start the server, see config below._
 
 ### `.env.local` Config
 
@@ -131,6 +133,20 @@ SERVER_PATH="C:\Games\Servers\VRisingDedicatedServer"
 SERVER_EXE_PATH="C:\Games\Servers\VRisingDedicatedServer\VRisingServer.exe"
 SERVER_EXE_ARGS=""
 SERVER_CONFIG_PATHS="C:\Games\Servers\VRisingDedicatedServer\ServerHostSettings.json,C:\Games\Servers\VRisingDedicatedServer\ServerGameSettings.json"
+SERVER_LOG_PATH=""
+```
+
+##### Valheim
+
+```dotenv
+NEXT_PUBLIC_ADAPTER="valheim"
+APP_ID="896660"
+SERVER_PATH="C:\Games\Servers\Valheim_Server"
+# Edit the `.bat`-file in the server dir to something like this: `valheim_server -nographics -batchmode -name "YourWorld" -port 8211 -world "YourWorldFile" -password "yourpassword" -crossplay -combat default -deathpenalty default -resources more -raids less -portals casual -console` (this is an example, check Valheim docs and tweak options as you like)
+SERVER_EXE_PATH="C:\Games\Servers\Valheim_Server\start_headless_server.bat"
+SERVER_EXE_ARGS=""
+# Valheim has no config file, options are passed in the BAT file
+SERVER_CONFIG_PATHS="C:\Games\Servers\Valheim_Server\config_placeholder.txt"
 SERVER_LOG_PATH=""
 ```
 

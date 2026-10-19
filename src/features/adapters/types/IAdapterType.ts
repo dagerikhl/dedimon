@@ -6,4 +6,5 @@ export type IAdapterType =
   | "palworld"
   | "rtm"
   | "soulmask"
-  | "v-rising";
+  | "v-rising"
+  | "valheim";
